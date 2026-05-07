@@ -58,8 +58,8 @@ Thumbs.db
 .env.production.local
 
 # Backend uploads
-backend/uploads/
-!backend/uploads/.gitkeep
+# backend/uploads/
+# !backend/uploads/.gitkeep
 
 # Data files
 data/xray/

@@ -18,12 +18,12 @@ def test_backend_health():
         return False
 
 def test_auth_flow():
-    """Test authentication flow (login with test user)"""
+    """Test authentication flow (login with demo admin user)"""
     try:
-        # Login
+        # Login with demo admin account
         login_data = {
-            'username': 'test@example.com',
-            'password': 'password123'
+            'username': 'admin@ayupulse.com',
+            'password': 'admin123'
         }
         
         response = requests.post('http://localhost:8000/auth/login', data=login_data)

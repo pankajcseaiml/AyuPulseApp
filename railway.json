@@ -1,0 +1,51 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "pip install -r requirements.txt",
+    "rootDirectory": "./backend",
+    "watchPatterns": [
+      "backend/**",
+      "!frontend/**",
+      "!data/**",
+      "!scripts/**",
+      "!tests/**"
+    ]
+  },
+  "deploy": {
+    "startCommand": "uvicorn app.main:app --host 0.0.0.0 --port $PORT",
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 60,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10,
+    "numReplicas": 1
+  },
+  "variables": {
+    "PYTHON_VERSION": "3.10",
+    "NODE_VERSION": "18",
+    "ENVIRONMENT": "production",
+    "DEBUG": "false",
+    "SECRET_KEY": {
+      "description": "Secret key for JWT token generation",
+      "generator": "secret"
+    },
+    "MONGODB_URL": {
+      "description": "MongoDB connection string",
+      "required": true
+    },
+    "BACKEND_CORS_ORIGINS": "https://ayu-pulse-app.vercel.app,https://ayupulseapp.vercel.app,http://localhost:5173",
+    "ALLOWED_HOSTS": "*"
+  },
+  "plugins": [
+    {
+      "name": "mongodb",
+      "type": "database.mongodb",
+      "required": true
+    }
+  ],
+  "service": {
+    "name": "ayu-pulse-backend",
+    "description": "FastAPI backend for AyuPulseApp healthcare platform",
+    "type": "web"
+  }
+}

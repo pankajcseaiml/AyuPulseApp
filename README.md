@@ -141,6 +141,22 @@ For a modern, scalable deployment, we recommend:
 
 Detailed step-by-step instructions are available in [DEPLOYMENT.md](DEPLOYMENT.md).
 
+#### Quick Vercel Frontend Deployment
+We've created easy-to-use deployment scripts:
+
+**Windows:**
+```bash
+deploy-vercel.bat
+```
+
+**Linux/Mac:**
+```bash
+chmod +x deploy-vercel.sh
+./deploy-vercel.sh
+```
+
+These scripts will guide you through deploying the frontend to Vercel with proper configuration. For detailed Vercel-specific instructions, see [DEPLOY_VERCEL.md](DEPLOY_VERCEL.md).
+
 ### GitHub
 The project is already configured with Git and can be pushed to your repository:
 ```bash
