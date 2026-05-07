@@ -2,13 +2,14 @@
 MongoDB DoctorPatientAssignment model using Beanie.
 """
 from datetime import datetime
-from typing import Optional
-from beanie import Document, Indexed
+from typing import Optional, Annotated
+from beanie import Document
+from beanie.odm.fields import Indexed
 from pydantic import Field
 
 class DoctorPatientAssignment(Document):
-    doctor_id: Indexed(str)  # type: ignore
-    patient_id: Indexed(str)  # type: ignore
+    doctor_id: Annotated[str, Indexed()]
+    patient_id: Annotated[str, Indexed()]
     assigned_by: str
     status: str = "active"
     notes: Optional[str] = None

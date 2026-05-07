@@ -3,8 +3,9 @@ MongoDB AuditLog model using Beanie.
 Tracks user activities, system events, and security logs for compliance and debugging.
 """
 from datetime import datetime
-from typing import Optional, Dict, Any
-from beanie import Document, Indexed
+from typing import Optional, Dict, Any, Annotated
+from beanie import Document
+from beanie.odm.fields import Indexed
 from pydantic import Field
 from enum import Enum
 
@@ -30,7 +31,7 @@ class AuditAction(str, Enum):
 class AuditLog(Document):
     """Audit log entry for tracking user and system activities"""
     # User information (if applicable)
-    user_id: Optional[Indexed(str)] = None  # type: ignore
+    user_id: Optional[Annotated[str, Indexed()]] = None
     user_email: Optional[str] = None
     user_role: Optional[str] = None
     
@@ -52,7 +53,7 @@ class AuditLog(Document):
     duration_ms: Optional[int] = None  # Request duration in milliseconds
     
     # Timestamps
-    created_at: Indexed(datetime) = Field(default_factory=datetime.utcnow)  # type: ignore
+    created_at: Annotated[datetime, Indexed()] = Field(default_factory=datetime.utcnow)
     
     class Settings:
         name = "audit_logs"

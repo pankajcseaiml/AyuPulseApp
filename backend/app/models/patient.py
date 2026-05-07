@@ -2,13 +2,14 @@
 MongoDB Patient model using Beanie.
 """
 from datetime import datetime, date
-from typing import Optional
-from beanie import Document, Indexed
+from typing import Optional, Annotated
+from beanie import Document
+from beanie.odm.fields import Indexed
 from pydantic import Field
 from .profile import MedicalHistory
 
 class Patient(Document):
-    owner_id: Indexed(str)  # type: ignore
+    owner_id: Annotated[str, Indexed()]
     full_name: str
     relationship: str  # "Self" / "Spouse" / "Parent" / "Child" / "Sibling" / "Other"
     date_of_birth: date

@@ -2,8 +2,9 @@
 MongoDB Prediction model using Beanie.
 """
 from datetime import datetime
-from typing import Optional, List, Dict, Any
-from beanie import Document, Indexed
+from typing import Optional, List, Dict, Any, Annotated
+from beanie import Document
+from beanie.odm.fields import Indexed
 from pydantic import BaseModel, Field
 
 class ShapFeature(BaseModel):
@@ -22,8 +23,8 @@ class ReferenceRange(BaseModel):
     status: str  # "normal" / "borderline" / "high" / "low"
 
 class Prediction(Document):
-    user_id: Indexed(str)  # type: ignore
-    patient_id: Optional[Indexed(str)] = None  # type: ignore
+    user_id: Annotated[str, Indexed()]
+    patient_id: Optional[Annotated[str, Indexed()]] = None
     subject_name: str
     
     # Clinical inputs (15 parameters)
@@ -80,7 +81,7 @@ class Prediction(Document):
     clinical_reference_ranges: Dict[str, ReferenceRange]
     
     # Metadata
-    created_at: Indexed(datetime) = Field(default_factory=datetime.utcnow)  # type: ignore
+    created_at: Annotated[datetime, Indexed()] = Field(default_factory=datetime.utcnow)
     prediction_duration_ms: int
 
     class Settings:

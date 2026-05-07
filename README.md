@@ -105,5 +105,47 @@ The application will be accessible at `http://localhost:5173`.
 
 ---
 
+## GitHub Deployment
+
+The project is ready to be pushed to GitHub. Follow these steps:
+
+### 1. Create GitHub Repository
+1. Go to https://github.com/pankajcseaiml
+2. Click the "+" icon in the top-right and select "New repository"
+3. Name it "AyuPulseApp" (or any name you prefer)
+4. Keep it public or private as desired
+5. **DO NOT** initialize with README, .gitignore, or license
+6. Click "Create repository"
+
+### 2. Push to GitHub
+Run the provided script:
+```bash
+push_to_github.bat
+```
+
+Or manually:
+```bash
+git remote add origin https://github.com/pankajcseaiml/AyuPulseApp.git
+git push -u origin master
+```
+
+### 3. Verify Deployment
+After pushing, your project will be available at:
+- Repository: https://github.com/pankajcseaiml/AyuPulseApp
+- Live servers (if running locally):
+  - Backend: http://localhost:8000
+  - Frontend: http://localhost:5173
+  - API Docs: http://localhost:8000/docs
+
+## Recent Fixes Applied
+- **Dashboard.tsx**: Fixed TypeScript error (`user?.name` → `user?.full_name`)
+- **Backend Models**: Resolved Pylance "Call expression not allowed in type expression" errors
+  - Changed `Indexed[str]` to `Indexed(str)` with `# type: ignore` comments
+  - Updated imports to `from beanie import Document, Indexed`
+- **Role System**: Streamlined from 4 roles (admin, doctor, staff, patient) to 3 roles (admin, doctor, patient)
+  - Updated backend validation and frontend UI
+  - Created migration script `scripts/update_staff_to_doctor.py`
+- **Backend Sorting**: Fixed predictions not sorted by `created_at` descending
+
 ## Disclaimer
 AyuPulse is built as a screening tool and demonstration of explainable AI in healthcare. It is **not** a diagnostic tool. Always consult a healthcare professional.

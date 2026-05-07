@@ -2,8 +2,9 @@
 MongoDB UserProfile model using Beanie.
 """
 from datetime import datetime, date
-from typing import Optional, List
-from beanie import Document, Indexed
+from typing import Optional, List, Annotated
+from beanie import Document
+from beanie.odm.fields import Indexed
 from pydantic import BaseModel, Field
 
 class Lifestyle(BaseModel):
@@ -20,7 +21,7 @@ class MedicalHistory(BaseModel):
     current_medications: List[str] = Field(default_factory=list)
 
 class UserProfile(Document):
-    user_id: Indexed(str, unique=True)  # type: ignore
+    user_id: Annotated[str, Indexed(unique=True)]
     full_name: str
     date_of_birth: date
     age: int
