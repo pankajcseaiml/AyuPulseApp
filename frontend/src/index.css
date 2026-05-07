@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#f8fafc] font-sans antialiased text-navy-900;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-semibold tracking-tight text-navy-900;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-navy-200 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-navy-400;
+}
+
+/* Texture overlay for hero sections */
+.bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* Print styles for Results page */
+@media print {
+  body {
+    background: white;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .print-break-inside-avoid {
+    break-inside: avoid;
+  }
+  .print-shadow-none {
+    box-shadow: none !important;
+    border: 1px solid #e2e8f0;
+  }
+}
+
+/* Form inputs styling */
+@layer components {
+  .input-field {
+    @apply w-full rounded-lg border border-navy-200 px-4 py-2 text-navy-900 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors;
+  }
+  .label-text {
+    @apply block text-sm font-medium text-navy-900 mb-1;
+  }
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-hover text-white font-medium py-2 px-6 rounded-lg transition-colors shadow-sm;
+  }
+  .btn-secondary {
+    @apply bg-white hover:bg-navy-50 text-navy-700 border border-navy-200 font-medium py-2 px-6 rounded-lg transition-colors shadow-sm;
+  }
+  .card-base {
+    @apply bg-white rounded-xl shadow-soft border border-navy-50 p-6 text-navy-900;
+  }
+}

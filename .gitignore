@@ -1,0 +1,98 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.pytest_cache/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
+
+# Vite
+dist/
+dist-ssr/
+*.local
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Backend uploads
+backend/uploads/
+!backend/uploads/.gitkeep
+
+# Data files
+data/xray/
+data/ecg/
+
+# Python virtual environment
+backend/.venv/
+backend/venv/
+
+# Logs
+logs/
+*.log
+
+# MongoDB
+*.ns
+*.0
+*.1
+*.2
+*.3
+*.4
+*.5
+*.6
+*.7
+*.8
+*.9
+mongod.lock
+
+# Test outputs
+test_results/
+test_outputs/
+
+# Jupyter
+.ipynb_checkpoints
+
+# macOS
+.DS_Store
