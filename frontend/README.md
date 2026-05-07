@@ -1,187 +1,329 @@
 # AyuPulseApp – Frontend
 
-Modern React-based frontend for the Early Heart Disease Risk Prediction System.
+React-based frontend for the AyuPulse cardiovascular risk prediction system. Provides an intuitive interface for healthcare professionals and patients to interact with the AI-powered prediction engine.
 
 ## Features
 
-- **Responsive Dashboard**: Real-time metrics, charts, and prediction history
-- **Role-Based UI**: Tailored interfaces for Admin, Doctor, and Patient roles
-- **Multi-step Prediction**: Guided workflow for clinical data, X-ray, and ECG uploads
-- **Interactive Results**: Visual risk meters, SHAP charts, and Grad-CAM heatmaps
-- **Patient Management**: CRUD operations for patient records
-- **Authentication**: JWT-based login with demo accounts
-- **Modern UI**: Built with Tailwind CSS, Lucide icons, and Recharts
+- **Modern Dashboard**: Real-time statistics, recent predictions, and risk trend visualization
+- **Multi-step Prediction Form**: Guided workflow for clinical data, X-ray, and ECG uploads
+- **Interactive Results**: Detailed risk breakdown with SHAP charts and GradCAM visualizations
+- **Patient Management**: Create and manage patient profiles for family members
+- **Role-based Access**: Different interfaces for admin, doctor, and patient roles
+- **Responsive Design**: Fully responsive layout optimized for desktop and tablet
 
 ## Tech Stack
 
-- **React 18** – UI library with hooks
-- **TypeScript** – Type-safe development
+- **React 19** – Frontend library with hooks
+- **TypeScript** – Type-safe JavaScript
 - **Vite** – Fast build tool and dev server
-- **Tailwind CSS** – Utility-first styling
-- **React Router** – Client-side routing
-- **React Hook Form + Zod** – Form validation
-- **Axios** – HTTP client with interceptors
-- **Recharts** – Data visualization
-- **Lucide React** – Icon library
-- **Context API** – State management for auth
+- **TailwindCSS** – Utility-first CSS framework
+- **React Router v7** – Client-side routing
+- **Recharts** – Charting library for data visualization
+- **React Hook Form** – Form handling with validation
+- **Axios** – HTTP client for API calls
+- **Context API** – State management for authentication
 
 ## Project Structure
 
 ```
 frontend/
+├── public/                    # Static assets
+│   ├── favicon.svg
+│   └── icons.svg
 ├── src/
-│   ├── components/          # Reusable UI components
-│   │   ├── auth/           # Login, Register, ForgotPassword forms
-│   │   ├── forms/          # ClinicalForm, ImageUpload
-│   │   ├── layout/         # Navbar, Sidebar, Footer, DashboardLayout
-│   │   └── ui/             # Badge, MetricCard, RiskMeter, ShapChart, GradCamViewer
-│   ├── context/            # React context providers (AuthContext)
-│   ├── pages/              # Route-level components
-│   │   ├── Dashboard.tsx
-│   │   ├── LoginPage.tsx
-│   │   ├── RegisterPage.tsx
-│   │   ├── AdminPage.tsx
-│   │   ├── PatientsPage.tsx
-│   │   ├── NewPredictionPage.tsx
-│   │   ├── ResultsPage.tsx
-│   │   ├── HistoryPage.tsx
-│   │   ├── ProfilePage.tsx
-│   │   └── LandingPage.tsx
-│   ├── services/           # API service classes
-│   │   ├── auth.service.ts
-│   │   └── patient.service.ts
-│   ├── api/                # API client modules
+│   ├── api/                  # API service modules
 │   │   ├── auth.ts
 │   │   ├── patients.ts
 │   │   ├── predictions.ts
-│   │   ├── admin.ts
 │   │   ├── profile.ts
 │   │   └── base.ts
-│   ├── config.ts           # API endpoints and routes
-│   ├── App.tsx             # Root component with routing
-│   ├── main.tsx            # Entry point
-│   ├── App.css             # Global styles
-│   └── index.css           # Tailwind imports
-├── public/                 # Static assets
-├── package.json
-├── vite.config.ts
-├── tailwind.config.js
-└── tsconfig.json
+│   ├── assets/               # Images, fonts, etc.
+│   │   ├── hero.png
+│   │   └── react.svg
+│   ├── components/           # Reusable UI components
+│   │   ├── auth/            # Authentication forms
+│   │   ├── forms/           # Form components
+│   │   ├── layout/          # Layout components
+│   │   ├── patient/         # Patient-related components
+│   │   └── ui/              # Generic UI components
+│   ├── context/             # React context providers
+│   │   └── AuthContext.tsx
+│   ├── hooks/               # Custom React hooks
+│   ├── pages/               # Page components
+│   │   ├── Dashboard.tsx
+│   │   ├── LoginPage.tsx
+│   │   ├── RegisterPage.tsx
+│   │   ├── NewPredictionPage.tsx
+│   │   ├── ResultsPage.tsx
+│   │   ├── PatientsPage.tsx
+│   │   ├── ProfilePage.tsx
+│   │   ├── AdminPage.tsx
+│   │   └── LandingPage.tsx
+│   ├── services/            # Business logic services
+│   │   └── auth.service.ts
+│   ├── utils/               # Utility functions
+│   ├── App.tsx              # Main app component
+│   ├── App.css              # Global styles
+│   ├── index.css            # Tailwind imports
+│   └── main.tsx             # Application entry point
+├── package.json             # Dependencies and scripts
+├── vite.config.ts           # Vite configuration
+├── tailwind.config.js       # Tailwind configuration
+└── tsconfig.json            # TypeScript configuration
 ```
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+1. **Node.js 18+** – Download from [nodejs.org](https://nodejs.org/)
+2. **npm 9+** or **yarn** – Comes with Node.js
+3. **Backend Server** – The AyuPulse backend must be running (see backend README)
+4. **Git** – For cloning the repository
+
+## Step-by-Step Setup Guide
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/pankajcseaiml/AyuPulseApp.git
+cd AyuPulseApp/frontend
+```
+
+### Step 2: Install Dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+### Step 3: Configure Environment Variables
+
+1. Create a `.env` file in the `frontend/` directory:
+   ```bash
+   # Windows
+   copy .env.example .env
+   # Linux/Mac
+   cp .env.example .env
+   ```
+
+2. Edit the `.env` file:
+   ```env
+   # Backend API URL (default: localhost:8000)
+   VITE_API_URL=http://localhost:8000
+   
+   # Optional: Frontend port (default: 5173)
+   # VITE_PORT=5173
+   
+   # Optional: Enable/disable features
+   # VITE_ENABLE_ANALYTICS=false
+   ```
+
+   **Important:** Ensure the `VITE_API_URL` matches your backend server address.
+
+### Step 4: Start the Development Server
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+The application will start and be available at [http://localhost:5173](http://localhost:5173).
+
+### Step 5: Verify Frontend is Running
+
+1. Open your browser and navigate to [http://localhost:5173](http://localhost:5173)
+2. You should see the AyuPulse landing page
+3. Click "Get Started" to navigate to the login page
+
+## Connecting to Backend
+
+The frontend communicates with the backend API. Ensure:
+
+1. **Backend is running** on the URL specified in `VITE_API_URL`
+2. **CORS is configured** in backend to allow requests from frontend origin
+3. **API endpoints are accessible** – Test by visiting `http://localhost:8000/health`
+
+## Building for Production
+
+### Create Production Build
+
+```bash
+npm run build
+# or
+yarn build
+```
+
+This creates an optimized production build in the `dist/` directory.
+
+### Preview Production Build
+
+```bash
+npm run preview
+# or
+yarn preview
+```
+
+This serves the production build locally for testing.
+
+### Deploy to Hosting Service
+
+The `dist/` folder contains static files that can be deployed to:
+
+- **Vercel**: `vercel --prod`
+- **Netlify**: `netlify deploy --prod`
+- **GitHub Pages**: See deployment guide in root README
+- **Any static hosting**: Upload `dist/` contents to your hosting provider
+
+## Available Scripts
+
+- `npm run dev` – Start development server with hot reload
+- `npm run build` – Build for production
+- `npm run preview` – Preview production build locally
+- `npm run lint` – Run ESLint to check code quality
+- `npm run type-check` – Run TypeScript type checking
+
+## Application Flow
+
+### 1. Authentication
+- **Landing Page** → **Login/Register** → **Dashboard**
+- Users can register as patients or use demo accounts
+- Doctors and admins require backend creation
+
+### 2. Dashboard
+- Overview of recent predictions and statistics
+- Quick access to create new prediction
+- Navigation to patients, profile, and admin pages
+
+### 3. Creating a Prediction
+1. Click "New Prediction" on dashboard
+2. **Step 1**: Enter clinical parameters (15 fields)
+3. **Step 2**: Upload chest X-ray image (optional)
+4. **Step 3**: Upload ECG image (optional)
+5. **Step 4**: Review and submit
+6. **Results Page**: View risk score, explanations, and recommendations
+
+### 4. Patient Management
+- Create patient profiles for family members
+- View prediction history for each patient
+- Update patient medical information
+
+### 5. Admin Panel (Admin role only)
+- User management (create, update, delete users)
+- System statistics and monitoring
+- Access to all prediction data
 
 ## Role System
 
 The application supports three user roles:
 
-1. **Admin** – Full system access, user management, system statistics
-2. **Doctor** – Create predictions, manage patients, view all patient data
-3. **Patient** – View own predictions, personal profile, limited dashboard
+### 1. **Patient**
+- Create personal predictions
+- Manage own profile
+- View personal prediction history
 
-## Getting Started
+### 2. **Doctor**
+- All patient capabilities
+- Create predictions for patients
+- View all patients under their care
+- Access to medical reporting features
 
-### Prerequisites
-
-- Node.js 18+ and npm/yarn
-- Backend server running (see backend/README.md)
-- MongoDB instance
-
-### Installation
-
-1. Clone the repository
-2. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
-4. Configure environment (if needed):
-   - Copy `.env.example` to `.env.local`
-   - Update `VITE_API_BASE_URL` to point to your backend
-
-### Development
-
-Start the development server:
-```bash
-npm run dev
-```
-
-The app will be available at `http://localhost:5173`
-
-### Building for Production
-
-```bash
-npm run build
-```
-
-The built files will be in the `dist/` directory.
-
-### Testing
-
-Run the TypeScript compiler:
-```bash
-npm run type-check
-```
-
-## API Integration
-
-The frontend communicates with the backend via REST API. Key endpoints:
-
-- `POST /auth/login` – User authentication
-- `GET /auth/me` – Get current user
-- `POST /predictions` – Create new prediction
-- `GET /predictions` – List user predictions
-- `GET /patients` – List patients
-- `GET /admin/users` – List users (admin only)
+### 3. **Admin**
+- All doctor capabilities
+- User management
+- System administration
+- Access to all data and statistics
 
 ## Demo Accounts
 
-For quick testing, use these demo credentials:
+For testing, you can use these credentials:
 
-- **Admin**: username `admin`, password `admin123`
-- **Doctor**: username `doctor`, password `doctor123`
-- **Patient**: username `patient`, password `patient123`
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | `admin@example.com` | `admin123` |
+| Doctor | `doctor@example.com` | `doctor123` |
+| Patient | `patient@example.com` | `patient123` |
 
-## Key Components
-
-### Dashboard
-Displays user-specific metrics, recent predictions, and risk trend charts.
-
-### New Prediction Page
-Multi-step form for:
-1. Clinical parameters (age, blood pressure, cholesterol, etc.)
-2. X-ray image upload with preview
-3. ECG image upload with preview
-4. Results with risk score and explanations
-
-### Results Page
-Shows prediction details including:
-- Risk score with visual meter
-- SHAP feature importance chart
-- Grad-CAM heatmaps for X-ray/ECG
-- Plain English explanation
-- Reference ranges for clinical parameters
-
-### Admin Page
-User management interface for administrators:
-- Create new users
-- Toggle user active status
-- View system statistics
+Click the "Demo Login" buttons on the login page for quick access.
 
 ## Styling
 
-The UI uses Tailwind CSS with a custom color palette defined in `tailwind.config.js`:
+The application uses **TailwindCSS** with a custom theme:
 
-- Primary: `#3b82f6` (blue-500)
-- Secondary: `#10b981` (emerald-500)
-- Navy: `#1e293b` (slate-800)
-- Background gradients and shadows for depth
+- **Primary Color**: Navy blue (`#1e3a8a`)
+- **Secondary Color**: Teal (`#0d9488`)
+- **Fonts**: Sora (headings), DM Sans (body)
+- **Components**: Custom button styles, cards, and form elements
 
-## Deployment
+To modify styles:
+1. Edit `tailwind.config.js` for theme changes
+2. Edit `src/index.css` for global styles
+3. Use Tailwind utility classes in components
 
-The frontend can be deployed as static files. A sample `nginx.conf` is provided for production serving.
+## API Integration
+
+The frontend communicates with the backend via REST API:
+
+- **Authentication**: JWT tokens stored in localStorage
+- **API Client**: Axios instance in `src/api/base.ts`
+- **Error Handling**: Global interceptors for token refresh and error display
+- **Type Safety**: TypeScript interfaces for all API responses
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Backend Connection Failed**
+   ```
+   Error: Network Error
+   ```
+   - Check if backend is running: `curl http://localhost:8000/health`
+   - Verify `VITE_API_URL` in `.env` file
+   - Check CORS configuration in backend
+
+2. **Build Errors**
+   ```
+   Cannot find module 'recharts'
+   ```
+   - Reinstall dependencies: `npm install`
+   - Clear npm cache: `npm cache clean --force`
+
+3. **TypeScript Errors**
+   ```
+   Type 'X' is not assignable to type 'Y'
+   ```
+   - Run type check: `npm run type-check`
+   - Check interface definitions in API files
+
+4. **Page Not Loading**
+   - Clear browser cache
+   - Check console for errors (F12 → Console)
+   - Restart development server
+
+### Development Tips
+
+1. **Hot Reload**: Changes to components automatically refresh the page
+2. **ESLint**: Fix linting errors with `npm run lint -- --fix`
+3. **Type Checking**: Run `npm run type-check` to verify TypeScript types
+4. **Browser DevTools**: Use React DevTools extension for component inspection
+
+## Browser Support
+
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests and linting
+5. Submit a pull request
 
 ## License
 
-Proprietary – For AyuPulse internal use only.
+This project is licensed under the MIT License.

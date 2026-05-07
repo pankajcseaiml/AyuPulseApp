@@ -36,61 +36,44 @@ AyuPulse provides **full explainability** (via SHAP and GradCAM), family managem
 
 ---
 
-## Setup Instructions
+## Quick Start
 
-### 1. Prerequisites
-*   Python 3.10+
-*   Node.js 18+
-*   MongoDB instance (local or Atlas)
+### Prerequisites
+- Python 3.10+
+- Node.js 18+
+- MongoDB instance (local or Atlas)
 
-### 2. Backend Setup
+### 1. Clone the Repository
+```bash
+git clone https://github.com/pankajcseaiml/AyuPulseApp.git
+cd AyuPulseApp
+```
+
+### 2. Set Up Backend
 ```bash
 cd backend
-python -m venv venv
-
-# On Windows:
-venv\Scripts\activate
-# On Linux/Mac:
-source venv/bin/activate
-
-pip install -r requirements.txt
+# Follow detailed instructions in backend/README.md
 ```
 
-Create a `.env` file in the `backend/` directory:
-```env
-PROJECT_NAME="AyuPulseApp API"
-VERSION="1.0.0"
-MONGODB_URL="mongodb://localhost:27017"
-MONGODB_DB_NAME="ayupulse_db"
-SECRET_KEY="your-super-secret-key-change-this"
-ALGORITHM="HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES=1440
-UPLOAD_DIR="uploads"
-BACKEND_CORS_ORIGINS='["http://localhost:5173", "http://localhost:3000"]'
-```
-
-Start the backend server:
-```bash
-uvicorn app.main:app --reload --port 8000
-```
-
-### 3. Frontend Setup
+### 3. Set Up Frontend
 ```bash
 cd frontend
-npm install
-# Or: npm install recharts date-fns (if they are missing)
-
-# Ensure the backend URL is set, if different from localhost:8000
-# Create .env file in frontend/:
-# VITE_API_URL=http://localhost:8000
+# Follow detailed instructions in frontend/README.md
 ```
 
-Start the frontend server:
-```bash
-npm run dev
-```
+### 4. Run Both Servers
+1. Start backend: `cd backend && uvicorn app.main:app --reload --port 8000`
+2. Start frontend: `cd frontend && npm run dev`
+3. Open browser: [http://localhost:5173](http://localhost:5173)
 
-The application will be accessible at `http://localhost:5173`.
+---
+
+## Detailed Documentation
+
+For complete, step-by-step setup instructions, refer to:
+
+- **Backend Setup**: [backend/README.md](backend/README.md) – Detailed Python environment setup, MongoDB configuration, and API documentation
+- **Frontend Setup**: [frontend/README.md](frontend/README.md) – Complete React setup, environment configuration, and deployment guide
 
 ---
 
@@ -105,47 +88,81 @@ The application will be accessible at `http://localhost:5173`.
 
 ---
 
-## GitHub Deployment
+## Role System
 
-The project is ready to be pushed to GitHub. Follow these steps:
+The application supports three user roles:
 
-### 1. Create GitHub Repository
-1. Go to https://github.com/pankajcseaiml
-2. Click the "+" icon in the top-right and select "New repository"
-3. Name it "AyuPulseApp" (or any name you prefer)
-4. Keep it public or private as desired
-5. **DO NOT** initialize with README, .gitignore, or license
-6. Click "Create repository"
+1. **Patient** – Can create personal predictions and manage their profile
+2. **Doctor** – Can manage patients and create predictions for them
+3. **Admin** – Full system access including user management
 
-### 2. Push to GitHub
-Run the provided script:
-```bash
-push_to_github.bat
-```
+---
 
-Or manually:
+## Demo Accounts
+
+For quick testing, use these credentials:
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | `admin@example.com` | `admin123` |
+| Doctor | `doctor@example.com` | `doctor123` |
+| Patient | `patient@example.com` | `patient123` |
+
+---
+
+## API Documentation
+
+Once the backend is running, access the interactive API documentation:
+
+- Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
+- ReDoc: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+
+---
+
+## Recent Updates & Fixes
+
+- **Dashboard.tsx**: Fixed TypeScript error (`user?.name` → `user?.full_name`)
+- **Backend Models**: Resolved Pylance type annotation errors using `typing.Annotated` syntax
+- **Role System**: Streamlined from 4 roles to 3 roles (admin, doctor, patient)
+- **Backend Sorting**: Fixed predictions not sorted by `created_at` descending
+- **Documentation**: Added comprehensive README files for both backend and frontend
+
+---
+
+## Deployment
+
+The project is ready for deployment to various platforms:
+
+### GitHub
+The project is already configured with Git and can be pushed to your repository:
 ```bash
 git remote add origin https://github.com/pankajcseaiml/AyuPulseApp.git
 git push -u origin master
 ```
 
-### 3. Verify Deployment
-After pushing, your project will be available at:
-- Repository: https://github.com/pankajcseaiml/AyuPulseApp
-- Live servers (if running locally):
-  - Backend: http://localhost:8000
-  - Frontend: http://localhost:5173
-  - API Docs: http://localhost:8000/docs
+### Production Deployment
+- **Backend**: Deploy with gunicorn/uvicorn on platforms like Railway, Render, or AWS
+- **Frontend**: Build static files and deploy to Vercel, Netlify, or GitHub Pages
 
-## Recent Fixes Applied
-- **Dashboard.tsx**: Fixed TypeScript error (`user?.name` → `user?.full_name`)
-- **Backend Models**: Resolved Pylance "Call expression not allowed in type expression" errors
-  - Changed `Indexed[str]` to `Indexed(str)` with `# type: ignore` comments
-  - Updated imports to `from beanie import Document, Indexed`
-- **Role System**: Streamlined from 4 roles (admin, doctor, staff, patient) to 3 roles (admin, doctor, patient)
-  - Updated backend validation and frontend UI
-  - Created migration script `scripts/update_staff_to_doctor.py`
-- **Backend Sorting**: Fixed predictions not sorted by `created_at` descending
+See individual README files for detailed deployment instructions.
+
+---
+
+## Support
+
+If you encounter issues:
+1. Check the detailed README files in `backend/` and `frontend/` directories
+2. Review the API documentation at `/docs`
+3. Ensure all prerequisites are met
+
+---
 
 ## Disclaimer
-AyuPulse is built as a screening tool and demonstration of explainable AI in healthcare. It is **not** a diagnostic tool. Always consult a healthcare professional.
+
+This application is for **educational and demonstration purposes only**. The predictions and medical insights provided are simulated and should not be used for actual medical diagnosis or treatment decisions. Always consult qualified healthcare professionals for medical advice.
+
+---
+
+## License
+
+This project is licensed under the MIT License.

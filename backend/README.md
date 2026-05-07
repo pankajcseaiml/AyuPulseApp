@@ -4,7 +4,7 @@ Early Heart Disease Risk Prediction System backend built with FastAPI, MongoDB, 
 
 ## Features
 
-- **User Authentication**: JWT‑based registration/login with role‑based access (doctor/admin).
+- **User Authentication**: JWT‑based registration/login with role‑based access (admin, doctor, patient).
 - **Patient Management**: CRUD operations for patient records.
 - **Multi‑modal Prediction**: Combines chest X‑ray, ECG, and clinical data.
 - **Explainable AI**: SHAP values and plain‑English explanations.
@@ -48,189 +48,218 @@ backend/
 │   │   ├── auth.py
 │   │   ├── patients.py
 │   │   ├── predictions.py
-│   │   ├── health.py
+│   │   ├── profile.py
 │   │   └── admin.py
-│   ├── services/               # Business logic
-│   │   └── prediction_service.py
-│   ├── ml/                     # Machine learning modules
-│   │   ├── preprocessing.py
-│   │   ├── xray_model.py
-│   │   ├── ecg_model.py
+│   ├── ml/                     # Machine learning pipeline
 │   │   ├── clinical_model.py
+│   │   ├── ecg_model.py
+│   │   ├── xray_model.py
 │   │   ├── fusion_model.py
+│   │   ├── preprocessing.py
 │   │   └── explainability.py
-│   └── utils/                  # Utility functions
-│       └── file_ops.py
-├── uploads/                    # Uploaded files (created at runtime)
+│   └── services/               # Business logic services
+│       └── prediction_service.py
 ├── requirements.txt            # Python dependencies
-├── .env                        # Environment variables (template)
-└── README.md                   # This file
+├── .env.example               # Environment variables template
+└── README.md                  # This file
 ```
 
-## Setup
+## Prerequisites
 
-### 1. Prerequisites
+Before you begin, ensure you have the following installed:
 
-- Python 3.9+
-- MongoDB running locally (default: `mongodb://localhost:27017`)
-- Virtual environment recommended
+1. **Python 3.10+** – Download from [python.org](https://www.python.org/downloads/)
+2. **MongoDB** – Either:
+   - Local MongoDB installation ([Download](https://www.mongodb.com/try/download/community))
+   - MongoDB Atlas cloud instance ([Sign up](https://www.mongodb.com/cloud/atlas/register))
+3. **Git** – For cloning the repository ([Download](https://git-scm.com/downloads))
 
-### 2. Install dependencies
+## Step-by-Step Setup Guide
+
+### Step 1: Clone the Repository
 
 ```bash
-cd backend
+git clone https://github.com/pankajcseaiml/AyuPulseApp.git
+cd AyuPulseApp/backend
+```
+
+### Step 2: Create Virtual Environment
+
+```bash
+# Create virtual environment
 python -m venv venv
+
+# Activate virtual environment
 # On Windows:
 venv\Scripts\activate
-# On macOS/Linux:
+# On Linux/Mac:
 source venv/bin/activate
+```
 
+### Step 3: Install Dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
-### 3. Configure environment
+### Step 4: Configure Environment Variables
 
-Copy `.env.example` to `.env` and adjust if needed:
+1. Copy the example environment file:
+   ```bash
+   copy .env.example .env  # Windows
+   # or
+   cp .env.example .env    # Linux/Mac
+   ```
+
+2. Edit the `.env` file with your configuration:
+   ```env
+   PROJECT_NAME="AyuPulseApp API"
+   VERSION="1.0.0"
+   MONGODB_URL="mongodb://localhost:27017"
+   MONGODB_DB_NAME="ayupulse_db"
+   SECRET_KEY="your-super-secret-key-change-this-in-production"
+   ALGORITHM="HS256"
+   ACCESS_TOKEN_EXPIRE_MINUTES=1440
+   UPLOAD_DIR="uploads"
+   BACKEND_CORS_ORIGINS='["http://localhost:5173", "http://localhost:3000"]'
+   ```
+
+   **Important Notes:**
+   - `MONGODB_URL`: Change to your MongoDB connection string
+   - `SECRET_KEY`: Generate a strong secret key for JWT tokens
+   - `BACKEND_CORS_ORIGINS`: Add frontend URLs that should be allowed
+
+### Step 5: Initialize MongoDB
+
+Ensure MongoDB is running:
 
 ```bash
-cp .env .env.local
+# Start MongoDB service (Windows)
+net start MongoDB
+
+# Or start MongoDB daemon (Linux/Mac)
+sudo systemctl start mongod
 ```
 
-Default values are fine for local development.
+### Step 6: Run Database Initialization (Optional)
 
-### 4. Run the backend
+If you want to create initial admin user and test data:
 
 ```bash
+python scripts/initialize_database.py
+```
+
+### Step 7: Start the Backend Server
+
+```bash
+# Development mode with auto-reload
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-The API will be available at `http://localhost:8000`.
+### Step 8: Verify Backend is Running
 
-Interactive API documentation (Swagger UI) at `http://localhost:8000/docs`.
+Open your browser and navigate to:
+
+1. **API Documentation**: [http://localhost:8000/docs](http://localhost:8000/docs)
+2. **Alternative Docs**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+3. **Health Check**: [http://localhost:8000/health](http://localhost:8000/health)
+
+You should see the FastAPI interactive documentation with all available endpoints.
+
+## Running in Production
+
+For production deployment, use:
+
+```bash
+# Install production dependencies
+pip install gunicorn
+
+# Run with gunicorn (Linux/Mac)
+gunicorn app.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
+
+# Or with uvicorn directly
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
+```
 
 ## API Endpoints
 
-### Public
-- `GET /health` – Health check
-- `POST /auth/register` – Register a new user
-- `POST /auth/login` – Login, receive JWT token
-
-### Protected (require JWT)
+### Authentication
+- `POST /auth/register` – Register new user
+- `POST /auth/login` – Login and get JWT token
 - `GET /auth/me` – Get current user info
-- `POST /patients` – Create a patient
-- `GET /patients` – List patients (with pagination)
-- `GET /patients/{id}` – Get a patient
-- `PUT /patients/{id}` – Update a patient
-- `DELETE /patients/{id}` – Delete a patient
-- `GET /patients/search` – Search patients by name, age, gender
-- `GET /patients/stats/summary` – Get patient statistics
-- `POST /predictions` – Create a prediction (upload X‑ray, ECG, clinical data)
-- `GET /predictions` – List predictions (with pagination)
-- `GET /predictions/{id}` – Get a prediction
-- `DELETE /predictions/{id}` – Delete a prediction
-- `GET /predictions/patient/{patient_id}` – Get predictions for a patient
+
+### Predictions
+- `POST /predictions` – Create new prediction
+- `GET /predictions` – List user predictions
+- `GET /predictions/{id}` – Get prediction details
+- `DELETE /predictions/{id}` – Delete prediction
 - `GET /predictions/stats/summary` – Get prediction statistics
 
-### Admin (require admin role)
-- `GET /admin/users` – List all users (with filtering)
-- `GET /admin/users/{user_id}` – Get user details
-- `PUT /admin/users/{user_id}` – Update user (role, active status, etc.)
-- `DELETE /admin/users/{user_id}` – Delete a user
-- `POST /admin/users/{user_id}/toggle-active` – Toggle user active status
-- `GET /admin/stats` – Get system statistics (users, patients, predictions)
+### Patients
+- `POST /patients` – Create patient record
+- `GET /patients` – List patients
+- `GET /patients/{id}` – Get patient details
+- `PUT /patients/{id}` – Update patient
+- `DELETE /patients/{id}` – Delete patient
 
-## Error Handling & Response Schemas
-
-The API uses standardized response formats for both success and error responses.
-
-### Success Responses
-All successful responses follow a consistent structure:
-- **StandardResponse**: `{ "success": true, "message": "...", "data": {...}, "timestamp": "..." }`
-- **PaginatedResponse**: Includes pagination metadata (`total`, `page`, `limit`, `has_next`, `has_prev`)
-- **StatsResponse**: For statistics endpoints
-- **HealthResponse**: For health checks
-- **DeleteResponse**: For delete operations
-- **FileUploadResponse**: For file uploads
-
-### Error Responses
-All errors return a consistent error format:
-- **HTTP 4xx/5xx errors**: `{ "success": false, "error": "...", "code": "...", "detail": "...", "timestamp": "..." }`
-- **Validation errors**: Include additional `errors` array with field-specific details
-
-### Custom Exception Handlers
-The backend includes comprehensive exception handling:
-- `HTTPException`: Standard FastAPI HTTP exceptions
-- `AyuPulseException`: Custom application exceptions (NotFound, Unauthorized, Validation, etc.)
-- `RequestValidationError`: Pydantic validation errors with detailed field information
-- Global exception handler for unexpected errors
-
-### Middleware
-- **LoggingMiddleware**: Logs all HTTP requests and responses with timing
-- **SecurityHeadersMiddleware**: Adds security headers (X-Content-Type-Options, X-Frame-Options, etc.)
-
-## Prediction Pipeline
-
-1. **Input**: Clinical parameters (JSON), optional X‑ray image, optional ECG image.
-2. **Preprocessing**:
-   - X‑ray: resize, normalize, convert to tensor.
-   - ECG: same as X‑ray.
-   - Clinical: scale using trained scaler.
-3. **Model Inference**:
-   - X‑ray CNN extracts embedding.
-   - ECG CNN extracts embedding.
-   - Clinical Random Forest outputs probability.
-4. **Fusion**: Weighted average of the three modalities.
-5. **Explainability**:
-   - SHAP values for clinical features.
-   - Plain‑English explanation text.
-6. **Output**: Risk score (0–1), risk category (Low/Medium/High), confidence, explanation.
-
-## Data Sources
-
-The backend expects the following data directories (already present in the workspace):
-
-- `data/xray/true/` – X‑ray images with heart disease
-- `data/xray/false/` – Normal X‑ray images
-- `data/ecg/` – ECG images (train/test splits)
-- `data/patient_heart_parameters.csv` – Clinical dataset with 15 features + target
-
-## Development Notes
-
-- The ML models are **dummy implementations** for demonstration. In production, replace with trained models.
-- File uploads are stored locally in `uploads/`. Consider cloud storage for scalability.
-- MongoDB collections are created automatically on first insert.
-- Windows paths are handled correctly (use `os.path.join`).
+### Admin (Admin role required)
+- `POST /admin/users` – Create user
+- `GET /admin/users` – List all users
+- `PUT /admin/users/{id}` – Update user
+- `DELETE /admin/users/{id}` – Delete user
+- `GET /admin/stats` – System statistics
 
 ## Testing
 
-The backend includes comprehensive test coverage for key endpoints:
+Run the test suite:
 
-### Test Files
-- `test_health.py` – Tests for health and info endpoints
-- `test_auth.py` – Tests for user registration, login, and authentication
-
-### Running Tests
 ```bash
-cd backend
-pytest app/tests/ -v
+# Run all tests
+pytest
+
+# Run specific test file
+pytest app/tests/test_auth.py
+
+# Run with coverage
+pytest --cov=app
 ```
 
-### Test Features
-- Uses FastAPI TestClient for isolated testing
-- Tests both success and error scenarios
-- Validates response schemas and status codes
-- Tests authentication and authorization
+## Troubleshooting
 
-## Deployment
+### Common Issues
 
-For production:
+1. **MongoDB Connection Error**
+   - Ensure MongoDB is running: `mongod --version`
+   - Check connection string in `.env` file
+   - Verify network connectivity
 
-1. Set `DEBUG=False` in config.
-2. Use a strong `SECRET_KEY`.
-3. Use a production MongoDB (Atlas, or replica set).
-4. Serve with Gunicorn + Uvicorn workers.
-5. Set up reverse proxy (Nginx/Apache) with HTTPS.
+2. **Port Already in Use**
+   - Change port in command: `--port 8001`
+   - Find and kill process using port 8000
+
+3. **Missing Dependencies**
+   - Reinstall requirements: `pip install -r requirements.txt`
+   - Check Python version: `python --version`
+
+4. **Environment Variables Not Loaded**
+   - Ensure `.env` file is in `backend/` directory
+   - Restart the server after changing `.env`
+
+## Demo Accounts
+
+For testing purposes, you can use these demo accounts:
+
+- **Admin**: `admin@example.com` / `admin123`
+- **Doctor**: `doctor@example.com` / `doctor123`
+- **Patient**: `patient@example.com` / `patient123`
+
+## Support
+
+If you encounter issues:
+1. Check the [GitHub Issues](https://github.com/pankajcseaiml/AyuPulseApp/issues)
+2. Review the API documentation at `/docs`
+3. Ensure all prerequisites are met
 
 ## License
 
-Proprietary – AyuPulseApp.
+This project is licensed under the MIT License.
