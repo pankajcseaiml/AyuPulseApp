@@ -133,6 +133,14 @@ Once the backend is running, access the interactive API documentation:
 
 The project is ready for deployment to various platforms:
 
+### Recommended Cloud Deployment (Vercel + Railway + MongoDB Atlas)
+For a modern, scalable deployment, we recommend:
+- **Frontend**: Deploy to [Vercel](https://vercel.com) (React)
+- **Backend**: Deploy to [Railway](https://railway.app) (FastAPI)
+- **Database**: Use [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) (Cloud MongoDB)
+
+Detailed step-by-step instructions are available in [DEPLOYMENT.md](DEPLOYMENT.md).
+
 ### GitHub
 The project is already configured with Git and can be pushed to your repository:
 ```bash
@@ -140,11 +148,11 @@ git remote add origin https://github.com/pankajcseaiml/AyuPulseApp.git
 git push -u origin master
 ```
 
-### Production Deployment
-- **Backend**: Deploy with gunicorn/uvicorn on platforms like Railway, Render, or AWS
+### Alternative Deployment Options
+- **Backend**: Deploy with gunicorn/uvicorn on platforms like Railway, Render, Heroku, or AWS
 - **Frontend**: Build static files and deploy to Vercel, Netlify, or GitHub Pages
 
-See individual README files for detailed deployment instructions.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for comprehensive deployment instructions.
 
 ---
 

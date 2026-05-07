@@ -158,7 +158,124 @@ If you need Docker deployment, you can recreate the Docker configuration using:
 
 ### Option B: Cloud Platforms
 
-#### Heroku
+#### Recommended Stack: Vercel + Railway + MongoDB Atlas
+This is the recommended modern deployment stack for AyuPulseApp, providing excellent scalability, ease of use, and cost-effectiveness.
+
+##### Step 1: MongoDB Atlas Setup
+1. **Create MongoDB Atlas Account**
+   - Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+   - Sign up for a free account (512MB storage, shared cluster)
+
+2. **Create a Cluster**
+   - Click "Create a Cluster"
+   - Choose the FREE tier (M0 Sandbox)
+   - Select your preferred cloud provider (AWS, Google Cloud, or Azure)
+   - Choose region closest to your users
+   - Click "Create Cluster" (takes 1-3 minutes)
+
+3. **Configure Database Access**
+   - Go to "Database Access" → "Add New Database User"
+   - Create a username and strong password
+   - Set privileges: "Read and write to any database"
+   - Click "Add User"
+
+4. **Configure Network Access**
+   - Go to "Network Access" → "Add IP Address"
+   - For Railway deployment: Add `0.0.0.0/0` (allow from anywhere)
+   - Or add specific Railway IP ranges if known
+
+5. **Get Connection String**
+   - Go to "Database" → "Connect" → "Connect your application"
+   - Copy the connection string
+   - Replace `<password>` with your actual password
+   - Example: `mongodb+srv://username:password@cluster0.mongodb.net/ayupulse?retryWrites=true&w=majority`
+
+##### Step 2: Railway Backend Deployment
+1. **Create Railway Account**
+   - Go to [Railway](https://railway.app/)
+   - Sign up with GitHub
+
+2. **Create New Project**
+   - Click "New Project" → "Deploy from GitHub repo"
+   - Connect your GitHub account
+   - Select the AyuPulseApp repository
+
+3. **Configure Backend Service**
+   - Railway will auto-detect the Python backend
+   - Set the root directory to `backend`
+   - Railway will automatically install dependencies from `requirements.txt`
+
+4. **Set Environment Variables**
+   Add these variables in Railway dashboard:
+   ```
+   MONGODB_URL=your_mongodb_atlas_connection_string
+   DATABASE_NAME=ayupulse
+   SECRET_KEY=your_secure_random_secret_key_here
+   ALGORITHM=HS256
+   ACCESS_TOKEN_EXPIRE_MINUTES=30
+   DEBUG=False
+   BACKEND_CORS_ORIGINS=https://your-vercel-app.vercel.app,http://localhost:5173
+   MAX_UPLOAD_SIZE=10485760
+   ALLOWED_IMAGE_TYPES=image/jpeg,image/png,image/jpg
+   PORT=8000
+   ```
+
+5. **Deploy**
+   - Railway will automatically deploy when you push to GitHub
+   - Or trigger manual deployment from dashboard
+   - Get your backend URL (e.g., `https://ayupulse-backend.up.railway.app`)
+
+##### Step 3: Vercel Frontend Deployment
+1. **Create Vercel Account**
+   - Go to [Vercel](https://vercel.com/)
+   - Sign up with GitHub
+
+2. **Import Project**
+   - Click "Add New" → "Project"
+   - Import your GitHub repository
+   - Vercel will auto-detect React project
+
+3. **Configure Build Settings**
+   - Root directory: `frontend`
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+   - Install Command: `npm install`
+
+4. **Set Environment Variables**
+   Add these variables in Vercel dashboard:
+   ```
+   VITE_API_URL=https://your-railway-backend-url.up.railway.app
+   VITE_APP_NAME=AyuPulse
+   VITE_APP_VERSION=1.0.0
+   ```
+
+5. **Deploy**
+   - Click "Deploy"
+   - Vercel will build and deploy your frontend
+   - Get your frontend URL (e.g., `https://ayupulse.vercel.app`)
+
+6. **Update CORS in Backend**
+   - Go back to Railway backend environment variables
+   - Update `BACKEND_CORS_ORIGINS` to include your Vercel URL
+   - Example: `https://ayupulse.vercel.app,http://localhost:5173`
+
+##### Step 4: Verify Deployment
+1. **Test Backend API**
+   - Visit: `https://your-railway-backend-url.up.railway.app/docs`
+   - Should see FastAPI Swagger documentation
+
+2. **Test Frontend**
+   - Visit your Vercel URL
+   - Should see AyuPulseApp landing page
+   - Try login with demo accounts
+
+3. **Test Database Connection**
+   - Create a test user via registration
+   - Check MongoDB Atlas dashboard for new data
+
+#### Alternative Cloud Platforms
+
+##### Heroku
 ```bash
 # Backend
 heroku create ayupulse-backend
@@ -172,7 +289,7 @@ npm run build
 # Deploy build folder to Netlify/Vercel
 ```
 
-#### AWS Elastic Beanstalk
+##### AWS Elastic Beanstalk
 ```bash
 # Install EB CLI
 pip install awsebcli
@@ -219,8 +336,8 @@ tail -f /var/log/nginx/error.log
 ```
 
 ### Health Checks
-- API Health: `GET /api/health`
-- Service Info: `GET /api/info`
+- API Health: `GET /health`
+- Service Info: `GET /info`
 
 ### Backup
 ```bash
