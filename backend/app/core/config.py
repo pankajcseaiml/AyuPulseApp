@@ -77,7 +77,8 @@ class Settings(BaseSettings):
         "http://127.0.0.1:3000",
         "https://ayu-pulse-app.vercel.app",
         "https://ayupulseapp.vercel.app",
-        "https://ayupulseapp-pankajcseaiml.vercel.app"
+        "https://ayupulseapp-pankajcseaiml.vercel.app",
+        "https://ayupulseapp.onrender.com"
     ]
     
     # File upload
