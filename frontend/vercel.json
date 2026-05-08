@@ -45,7 +45,8 @@
   "env": {
     "VITE_API_URL": {
       "description": "Backend API URL (e.g., https://your-backend.railway.app)",
-      "required": true
+      "required": true,
+      "value": "https://ayupulseapp.onrender.com"
     },
     "VITE_APP_NAME": {
       "description": "Application name",
