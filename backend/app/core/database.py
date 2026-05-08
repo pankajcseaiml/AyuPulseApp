@@ -1,6 +1,7 @@
 """
 MongoDB connection and database utilities using Beanie.
 """
+import certifi
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
 from app.core.config import settings
@@ -20,7 +21,15 @@ db = Database()
 
 async def connect_to_mongo():
     """Connect to MongoDB and initialize Beanie."""
-    db.client = AsyncIOMotorClient(settings.MONGODB_URL)
+    # For MongoDB Atlas (mongodb+srv://) we need TLS
+    if settings.MONGODB_URL.startswith("mongodb+srv://"):
+        db.client = AsyncIOMotorClient(
+            settings.MONGODB_URL,
+            tls=True,
+            tlsCAFile=certifi.where()
+        )
+    else:
+        db.client = AsyncIOMotorClient(settings.MONGODB_URL)
     
     await init_beanie(
         database=db.client[settings.MONGODB_DB_NAME],
