@@ -1,7 +1,7 @@
 """
 Main FastAPI application entry point.
 """
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import logging
@@ -76,6 +76,8 @@ app.include_router(patients.router, prefix="/patients", tags=["Patients"])
 app.include_router(predictions.router, prefix="/predictions", tags=["Predictions"])
 app.include_router(admin.router, prefix="/admin", tags=["Admin"])
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 async def root():
+    if request.method == "HEAD":
+        return Response(status_code=200)
     return {"message": "Welcome to AyuPulseApp Backend API"}
