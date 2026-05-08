@@ -78,7 +78,12 @@ class Settings(BaseSettings):
         "https://ayu-pulse-app.vercel.app",
         "https://ayupulseapp.vercel.app",
         "https://ayupulseapp-pankajcseaiml.vercel.app",
-        "https://ayupulseapp.onrender.com"
+        "https://ayupulseapp.onrender.com",
+        # Current Vercel deployments
+        "https://frontend-kappa-lake-ahv5xllb0o.vercel.app",
+        "https://frontend-hix32ikti-pankajcseaimls-projects.vercel.app",
+        # Wildcard for all Vercel preview deployments
+        "https://*.vercel.app"
     ]
     
     # File upload
