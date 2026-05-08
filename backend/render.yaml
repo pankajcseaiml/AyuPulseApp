@@ -21,7 +21,7 @@ services:
         value: "false"
         description: Debug mode (false for production)
       - key: BACKEND_CORS_ORIGINS
-        value: "https://ayu-pulse-app.vercel.app,https://ayupulseapp.vercel.app,http://localhost:5174"
+        value: "https://ayu-pulse-app.vercel.app,https://ayupulseapp.vercel.app,http://localhost:5174,https://ayupulseapp.onrender.com"
         description: Allowed CORS origins
       - key: PROJECT_NAME
         value: "AyuPulseApp"
