@@ -35,8 +35,30 @@ class Settings(BaseSettings):
         return v
     
     # MongoDB
-    MONGODB_URL: str = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
-    MONGODB_DB_NAME: str = os.getenv("MONGODB_DB_NAME", "ayupulse")
+    MONGODB_URL: str = "mongodb://localhost:27017"
+    MONGODB_DB_NAME: str = "ayupulse"
+    
+    @field_validator('MONGODB_URL', mode='before')
+    @classmethod
+    def validate_mongodb_url(cls, v):
+        if isinstance(v, str):
+            v = v.strip()
+            if not v:
+                # If empty string, fallback to default
+                return "mongodb://localhost:27017"
+            # Ensure it starts with correct scheme
+            if not (v.startswith("mongodb://") or v.startswith("mongodb+srv://")):
+                raise ValueError("MONGODB_URL must start with 'mongodb://' or 'mongodb+srv://'")
+        return v
+    
+    @field_validator('MONGODB_DB_NAME', mode='before')
+    @classmethod
+    def validate_mongodb_db_name(cls, v):
+        if isinstance(v, str):
+            v = v.strip()
+            if not v:
+                return "ayupulse"
+        return v
     
     # JWT
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-change-in-production")
