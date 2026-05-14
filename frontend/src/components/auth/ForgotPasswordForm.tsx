@@ -64,8 +64,8 @@ const ForgotPasswordForm: React.FC = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
               <Mail className="w-8 h-8 text-primary" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900">Reset Password</h1>
-            <p className="text-gray-600 mt-2">
+            <h1 className="text-3xl font-bold text-navy-900">Reset Password</h1>
+            <p className="text-navy-600 mt-2">
               Enter your email address and we'll send you a link to reset your password
             </p>
           </div>
@@ -76,8 +76,8 @@ const ForgotPasswordForm: React.FC = () => {
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 mb-6">
                 <CheckCircle className="w-10 h-10 text-green-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-3">Check Your Email</h2>
-              <p className="text-gray-600 mb-8">
+              <h2 className="text-2xl font-bold text-navy-900 mb-3">Check Your Email</h2>
+              <p className="text-navy-600 mb-8">
                 We've sent a password reset link to your email address.
                 Please check your inbox and follow the instructions.
               </p>
@@ -88,7 +88,7 @@ const ForgotPasswordForm: React.FC = () => {
                 >
                   Return to Login
                 </Link>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-navy-500">
                   Didn't receive the email?{' '}
                   <button
                     type="button"
@@ -150,7 +150,7 @@ const ForgotPasswordForm: React.FC = () => {
               </form>
 
               {/* Additional Info */}
-              <div className="mt-8 pt-6 border-t border-gray-200">
+              <div className="mt-8 pt-6 border-t border-navy-200">
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <h3 className="font-semibold text-blue-800 mb-2">Need help?</h3>
                   <ul className="text-sm text-blue-700 space-y-1">
@@ -166,7 +166,7 @@ const ForgotPasswordForm: React.FC = () => {
 
         {/* Footer */}
         <div className="mt-8 text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-navy-600">
             Remember your password?{' '}
             <Link
               to="/login"
@@ -175,7 +175,7 @@ const ForgotPasswordForm: React.FC = () => {
               Sign in here
             </Link>
           </p>
-          <p className="text-xs text-gray-500 mt-4">
+          <p className="text-xs text-navy-500 mt-4">
             For security reasons, password reset links expire in 1 hour.
             <br />
             If you don't have access to your email, please contact support.

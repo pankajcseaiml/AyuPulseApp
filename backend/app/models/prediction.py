@@ -86,6 +86,13 @@ class Prediction(Document):
 
     class Settings:
         name = "predictions"
-        # Compound indexes as required by prompt aren't strictly just lists of strings in Beanie,
-        # but Beanie accepts tuple configurations. The prompt says "Index: user_id, patient_id, created_at".
-        # We've added Indexed() to the fields directly.
+        indexes = [
+            "user_id",
+            "patient_id",
+            "created_at",
+            "risk_category",
+            # Compound indexes for common queries
+            [("user_id", 1), ("created_at", -1)],
+            [("patient_id", 1), ("created_at", -1)],
+            [("risk_category", 1), ("created_at", -1)],
+        ]

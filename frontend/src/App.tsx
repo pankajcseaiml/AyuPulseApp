@@ -40,7 +40,7 @@ function App() {
         {/* Admin only */}
         <Route 
           path="/admin" 
-          element={user?.role === 'admin' ? <AdminPage /> : <Navigate to="/dashboard" />} 
+          element={(user?.role === 'admin' || user?.role === 'staff') ? <AdminPage /> : <Navigate to="/dashboard" />}
         />
       </Route>
       

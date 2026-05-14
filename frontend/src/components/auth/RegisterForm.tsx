@@ -114,8 +114,8 @@ const RegisterForm: React.FC = () => {
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
                 <UserPlus className="w-8 h-8 text-primary" />
               </div>
-              <h1 className="text-3xl font-bold text-gray-900">Create Account</h1>
-              <p className="text-gray-600 mt-2">Join AyuPulse to start predicting heart disease risks</p>
+              <h1 className="text-3xl font-bold text-navy-900">Create Account</h1>
+              <p className="text-navy-600 mt-2">Join AyuPulse to start predicting heart disease risks</p>
             </div>
 
             {/* Error Message */}
@@ -210,7 +210,7 @@ const RegisterForm: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-navy-500 hover:text-navy-700"
                       disabled={isSubmitting}
                     >
                       {showPassword ? (
@@ -228,12 +228,12 @@ const RegisterForm: React.FC = () => {
                   {password && (
                     <div className="mt-2">
                       <div className="flex justify-between text-xs mb-1">
-                        <span className="text-gray-600">Password strength:</span>
+                        <span className="text-navy-600">Password strength:</span>
                         <span className={`font-medium ${strength.color === 'red' ? 'text-red-600' : strength.color === 'orange' ? 'text-orange-600' : strength.color === 'yellow' ? 'text-yellow-600' : strength.color === 'lime' ? 'text-lime-600' : 'text-green-600'}`}>
                           {strength.label}
                         </span>
                       </div>
-                      <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-navy-200 rounded-full overflow-hidden">
                         <div
                           className={`h-full ${strength.color === 'red' ? 'bg-red-500' : strength.color === 'orange' ? 'bg-orange-500' : strength.color === 'yellow' ? 'bg-yellow-500' : strength.color === 'lime' ? 'bg-lime-500' : 'bg-green-500'} transition-all duration-300`}
                           style={{ width: `${(passwordStrength(password).score / 5) * 100}%` }}
@@ -260,7 +260,7 @@ const RegisterForm: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-navy-500 hover:text-navy-700"
                       disabled={isSubmitting}
                     >
                       {showConfirmPassword ? (
@@ -281,10 +281,10 @@ const RegisterForm: React.FC = () => {
                   id="agreeToTerms"
                   type="checkbox"
                   {...register('agreeToTerms')}
-                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded mt-1"
+                  className="h-4 w-4 text-primary focus:ring-primary border-navy-300 rounded mt-1"
                   disabled={isSubmitting}
                 />
-                <label htmlFor="agreeToTerms" className="ml-2 block text-sm text-gray-700">
+                <label htmlFor="agreeToTerms" className="ml-2 block text-sm text-navy-700">
                   I agree to the{' '}
                   <a href="#" className="text-primary font-medium hover:underline">
                     Terms of Service
@@ -307,7 +307,7 @@ const RegisterForm: React.FC = () => {
               >
                 {isSubmitting ? (
                   <>
-                    <div className="spinner h-5 w-5 mr-2"></div>
+                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white/30 border-t-white mr-2"></div>
                     Creating Account...
                   </>
                 ) : (
@@ -321,7 +321,7 @@ const RegisterForm: React.FC = () => {
 
             {/* Sign In Link */}
             <div className="mt-8 text-center">
-              <p className="text-gray-600">
+              <p className="text-navy-600">
                 Already have an account?{' '}
                 <Link
                   to="/login"
@@ -362,18 +362,19 @@ const RegisterForm: React.FC = () => {
             </div>
 
             <div className="bg-white/10 rounded-xl p-6">
-              <h3 className="font-bold mb-3">For Healthcare Professionals</h3>
+              <h3 className="font-bold mb-3">Patient-First Approach</h3>
               <p className="text-sm opacity-90">
-                AyuPulse is designed specifically for doctors, nurses, and healthcare staff 
-                to enhance clinical decision-making through data-driven insights.
+                AyuPulse empowers patients to take control of their heart health
+                through AI-driven risk assessments, early detection, and
+                personalized health insights.
               </p>
             </div>
 
             <div className="mt-8 pt-6 border-t border-white/20">
               <p className="text-sm opacity-80">
-                <strong>Note:</strong> All accounts require verification. 
-                Admin approval may be needed for certain roles. 
-                Demo accounts are available for testing.
+                <strong>Note:</strong> This account gives you patient-level access.
+                Healthcare professionals should contact an administrator
+                for doctor or staff accounts.
               </p>
             </div>
           </div>
@@ -382,9 +383,9 @@ const RegisterForm: React.FC = () => {
 
       {/* Footer */}
       <div className="mt-6 text-center">
-        <p className="text-xs text-gray-500">
-          By creating an account, you confirm that you are a healthcare professional 
-          or authorized personnel. All medical data is encrypted and stored securely.
+        <p className="text-xs text-navy-500">
+          By creating an account, you agree to AyuPulse's Terms of Service and Privacy Policy.
+          All medical data is encrypted and stored securely.
           <br />
           © {new Date().getFullYear()} AyuPulse. All rights reserved.
         </p>

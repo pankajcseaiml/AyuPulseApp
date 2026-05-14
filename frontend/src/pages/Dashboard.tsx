@@ -121,7 +121,7 @@ export const Dashboard: React.FC = () => {
           
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
-              <thead className="text-xs text-navy-500 uppercase bg-navy-50 rounded-t-lg">
+              <thead className="text-xs text-navy-700 uppercase bg-navy-50 rounded-t-lg">
                 <tr>
                   <th className="px-4 py-3 rounded-tl-lg">Date</th>
                   <th className="px-4 py-3">Subject</th>

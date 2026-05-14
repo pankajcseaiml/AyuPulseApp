@@ -183,7 +183,7 @@ export const PatientsPage: React.FC = () => {
                 </button>
               </div>
               
-              <div className="w-12 h-12 bg-primary-100 text-primary rounded-full flex items-center justify-center font-bold text-xl mb-4">
+              <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center font-bold text-xl mb-4">
                 {p.full_name.charAt(0)}
               </div>
               <h3 className="text-xl font-heading font-semibold text-navy-900">{p.full_name}</h3>

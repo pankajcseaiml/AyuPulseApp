@@ -10,10 +10,11 @@ class User(Document):
     name: str
     email: EmailStr
     username: Optional[str] = None
-    role: str = "patient"  # patient, doctor, admin
+    role: str = "patient"  # patient, doctor, staff, admin
     is_active: bool = True
     hashed_password: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:
         name = "users"
@@ -21,4 +22,5 @@ class User(Document):
             "email",
             "username",
             "role",
+            "is_active",
         ]

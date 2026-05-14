@@ -102,15 +102,15 @@ export const ClinicalForm: React.FC<ClinicalFormProps> = ({ data, onChange, erro
             </select>
           </div>
           <div className="flex items-center mt-6">
-            <input type="checkbox" id="BPMeds" name="BPMeds" checked={data.BPMeds === 1} onChange={(e) => onChange({ target: { name: 'BPMeds', value: e.target.checked ? 1 : 0 } } as any)} className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary" />
+            <input type="checkbox" id="BPMeds" name="BPMeds" checked={data.BPMeds === 1} onChange={(e) => onChange({ target: { name: 'BPMeds', value: e.target.checked ? 1 : 0 } } as any)} className="w-4 h-4 text-primary rounded border-navy-300 focus:ring-primary" />
             <label htmlFor="BPMeds" className="ml-2 text-sm text-navy-700">Currently taking BP Medication</label>
           </div>
           <div className="flex items-center mt-6">
-            <input type="checkbox" id="prevalentHyp" name="prevalentHyp" checked={data.prevalentHyp === 1} onChange={(e) => onChange({ target: { name: 'prevalentHyp', value: e.target.checked ? 1 : 0 } } as any)} className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary" />
+            <input type="checkbox" id="prevalentHyp" name="prevalentHyp" checked={data.prevalentHyp === 1} onChange={(e) => onChange({ target: { name: 'prevalentHyp', value: e.target.checked ? 1 : 0 } } as any)} className="w-4 h-4 text-primary rounded border-navy-300 focus:ring-primary" />
             <label htmlFor="prevalentHyp" className="ml-2 text-sm text-navy-700">History of Hypertension</label>
           </div>
           <div className="flex items-center">
-            <input type="checkbox" id="prevalentStroke" name="prevalentStroke" checked={data.prevalentStroke === 1} onChange={(e) => onChange({ target: { name: 'prevalentStroke', value: e.target.checked ? 1 : 0 } } as any)} className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary" />
+            <input type="checkbox" id="prevalentStroke" name="prevalentStroke" checked={data.prevalentStroke === 1} onChange={(e) => onChange({ target: { name: 'prevalentStroke', value: e.target.checked ? 1 : 0 } } as any)} className="w-4 h-4 text-primary rounded border-navy-300 focus:ring-primary" />
             <label htmlFor="prevalentStroke" className="ml-2 text-sm text-navy-700">History of Stroke</label>
           </div>
         </div>
@@ -153,7 +153,7 @@ export const ClinicalForm: React.FC<ClinicalFormProps> = ({ data, onChange, erro
             {errors.BMI && <p className="text-red-500 text-xs mt-1">{errors.BMI}</p>}
           </div>
           <div className="flex items-center mt-6">
-            <input type="checkbox" id="diabetes" name="diabetes" checked={data.diabetes === 1} onChange={(e) => onChange({ target: { name: 'diabetes', value: e.target.checked ? 1 : 0 } } as any)} className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary" />
+            <input type="checkbox" id="diabetes" name="diabetes" checked={data.diabetes === 1} onChange={(e) => onChange({ target: { name: 'diabetes', value: e.target.checked ? 1 : 0 } } as any)} className="w-4 h-4 text-primary rounded border-navy-300 focus:ring-primary" />
             <label htmlFor="diabetes" className="ml-2 text-sm text-navy-700">Has Diabetes</label>
           </div>
         </div>
@@ -167,7 +167,7 @@ export const ClinicalForm: React.FC<ClinicalFormProps> = ({ data, onChange, erro
             <input type="checkbox" id="currentSmoker" name="currentSmoker" checked={data.currentSmoker === 1} onChange={(e) => {
               onChange({ target: { name: 'currentSmoker', value: e.target.checked ? 1 : 0 } } as any);
               if (!e.target.checked) onChange({ target: { name: 'cigsPerDay', value: 0 } } as any);
-            }} className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary" />
+            }} className="w-4 h-4 text-primary rounded border-navy-300 focus:ring-primary" />
             <label htmlFor="currentSmoker" className="ml-2 text-sm text-navy-700">Current Smoker</label>
           </div>
           

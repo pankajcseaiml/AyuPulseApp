@@ -77,7 +77,7 @@ app.include_router(predictions.router, prefix="/predictions", tags=["Predictions
 app.include_router(admin.router, prefix="/admin", tags=["Admin"])
 
 @app.api_route("/", methods=["GET", "HEAD"])
-async def root():
+async def root(request: Request):
     if request.method == "HEAD":
         return Response(status_code=200)
     return {"message": "Welcome to AyuPulseApp Backend API"}

@@ -180,7 +180,7 @@ export const ResultsPage: React.FC = () => {
       </div>
 
       {/* Recommendations */}
-      <div className="card-base mb-8 bg-primary-50/30 border-primary/20 print-break-inside-avoid">
+      <div className="card-base mb-8 bg-primary/5 border-primary/20 print-break-inside-avoid">
         <h3 className="font-heading font-semibold text-lg text-navy-900 mb-4 flex items-center gap-2">
           <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
           Clinical Recommendations

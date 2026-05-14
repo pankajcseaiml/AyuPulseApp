@@ -57,13 +57,14 @@ const CreateUserModal: React.FC<{ isOpen: boolean; onClose: () => void; onSucces
           </div>
           <div>
             <label className="label-text">Role</label>
-            <select 
+            <select
               className="input-field"
               value={formData.role}
               onChange={e => setFormData({...formData, role: e.target.value})}
             >
               <option value="admin">Admin</option>
               <option value="doctor">Doctor</option>
+              <option value="staff">Staff</option>
               <option value="patient">Patient</option>
             </select>
           </div>
@@ -166,7 +167,12 @@ export const AdminPage: React.FC = () => {
                   <td className="px-4 py-3 font-medium text-navy-900">{u.name}</td>
                   <td className="px-4 py-3 text-navy-600">{u.email}</td>
                   <td className="px-4 py-3">
-                    <span className={`px-2 py-1 rounded text-xs font-bold ${u.role === 'admin' ? 'bg-primary-100 text-primary' : 'bg-navy-100 text-navy-700'}`}>
+                    <span className={`px-2 py-1 rounded text-xs font-bold ${
+                      u.role === 'admin' ? 'bg-primary-100 text-primary' :
+                      u.role === 'doctor' ? 'bg-blue-100 text-blue-700' :
+                      u.role === 'staff' ? 'bg-purple-100 text-purple-700' :
+                      'bg-navy-100 text-navy-700'
+                    }`}>
                       {u.role.toUpperCase()}
                     </span>
                   </td>

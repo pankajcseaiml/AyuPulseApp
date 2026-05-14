@@ -37,7 +37,7 @@ api.interceptors.response.use(
           throw new Error('No refresh token available');
         }
         
-        const response = await axios.post(`${API_CONFIG.BASE_URL}/api/auth/refresh`, {
+        const response = await axios.post(`${API_CONFIG.BASE_URL}/auth/refresh`, {
           refresh_token: refreshToken,
         });
         
@@ -84,14 +84,14 @@ export interface UserData {
   username: string;
   email: string;
   full_name: string;
-  role: 'admin' | 'doctor' | 'patient';
+  role: 'admin' | 'doctor' | 'staff' | 'patient';
   is_active: boolean;
   created_at: string;
 }
 
 class AuthService {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const formData = new FormData();
+    const formData = new URLSearchParams();
     formData.append('username', credentials.username);
     formData.append('password', credentials.password);
     
@@ -100,7 +100,7 @@ class AuthService {
       formData,
       {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
       }
     );

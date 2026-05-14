@@ -85,6 +85,64 @@ async def update_patient(patient_id: str, patient_update: PatientUpdate, current
         data=PatientOut(**patient.model_dump())
     )
 
+@router.get("/search", response_model=StandardResponse[List[PatientOut]])
+async def search_patients(
+    query: str = None,
+    gender: str = None,
+    min_age: int = None,
+    max_age: int = None,
+    current_user: User = Depends(get_current_user)
+):
+    """Search patients with filters."""
+    from beanie.operators import RegEx
+    
+    # Build query filters
+    filters = [Patient.owner_id == str(current_user.id)]
+    
+    if query:
+        filters.append(RegEx(Patient.full_name, query, "i"))
+    
+    if gender:
+        filters.append(Patient.gender == gender)
+    
+    if min_age is not None:
+        filters.append(Patient.age >= min_age)
+    
+    if max_age is not None:
+        filters.append(Patient.age <= max_age)
+    
+    patients = await Patient.find(*filters).to_list()
+    data = [PatientOut(**p.model_dump()) for p in patients]
+    
+    return StandardResponse(
+        success=True,
+        message="Patients retrieved",
+        data=data
+    )
+
+@router.get("/stats/summary", response_model=StandardResponse[dict])
+async def get_patient_stats(current_user: User = Depends(get_current_user)):
+    """Get patient statistics for the current user."""
+    patients = await Patient.find(Patient.owner_id == str(current_user.id)).to_list()
+    
+    total = len(patients)
+    male_count = sum(1 for p in patients if p.gender and p.gender.lower() == 'male')
+    female_count = sum(1 for p in patients if p.gender and p.gender.lower() == 'female')
+    average_age = sum(p.age for p in patients) / max(1, total)
+    
+    return StandardResponse(
+        success=True,
+        message="Stats retrieved",
+        data={
+            "total_patients": total,
+            "male_count": male_count,
+            "female_count": female_count,
+            "average_age": round(average_age, 1),
+            "high_risk_count": 0,
+            "recent_patients": total
+        }
+    )
+
 @router.delete("/{patient_id}", response_model=StandardResponse[None])
 async def delete_patient(patient_id: str, current_user: User = Depends(get_current_user)):
     try:

@@ -22,7 +22,6 @@ class UserRegister(BaseModel):
     name: str
     email: EmailStr
     password: str
-    role: str = "patient"
     username: Optional[str] = None
 
 from typing import Annotated

@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
+from datetime import datetime
 from app.models.user import User
 from app.models.prediction import Prediction
 from app.schemas.auth import UserOut, UserUpdateAdmin, UserCreateAdmin
-from app.routes.auth import get_current_admin
+from app.routes.auth import get_current_admin, get_current_staff_or_admin
 from app.schemas.response import StandardResponse
 from app.core.security import get_password_hash
 
@@ -17,7 +18,7 @@ async def create_user(user_data: UserCreateAdmin, current_admin: User = Depends(
         raise HTTPException(status_code=400, detail="Email already registered")
         
     # Valid roles
-    if user_data.role not in ["patient", "doctor", "admin"]:
+    if user_data.role not in ["patient", "doctor", "staff", "admin"]:
         raise HTTPException(status_code=400, detail="Invalid role")
         
     new_user = User(
@@ -33,10 +34,11 @@ async def create_user(user_data: UserCreateAdmin, current_admin: User = Depends(
         success=True,
         message="User created by admin",
         data=UserOut(
-            id=str(new_user.id), 
-            name=new_user.name, 
-            email=new_user.email, 
-            role=new_user.role, 
+            id=str(new_user.id),
+            name=new_user.name,
+            email=new_user.email,
+            username=new_user.username,
+            role=new_user.role,
             is_active=new_user.is_active,
             created_at=new_user.created_at
         )
@@ -44,15 +46,15 @@ async def create_user(user_data: UserCreateAdmin, current_admin: User = Depends(
 
 
 @router.get("/users", response_model=StandardResponse[List[UserOut]])
-async def list_users(current_admin: User = Depends(get_current_admin)):
+async def list_users(current_admin: User = Depends(get_current_staff_or_admin)):
     users = await User.find_all().to_list()
     data = [UserOut(
-        id=str(u.id), name=u.name, email=u.email, role=u.role, is_active=u.is_active, created_at=u.created_at
+        id=str(u.id), name=u.name, email=u.email, username=u.username, role=u.role, is_active=u.is_active, created_at=u.created_at
     ) for u in users]
     return StandardResponse(success=True, message="Users retrieved", data=data)
 
 @router.get("/users/{user_id}", response_model=StandardResponse[UserOut])
-async def get_user(user_id: str, current_admin: User = Depends(get_current_admin)):
+async def get_user(user_id: str, current_admin: User = Depends(get_current_staff_or_admin)):
     try:
         user = await User.get(user_id)
     except Exception:
@@ -63,7 +65,7 @@ async def get_user(user_id: str, current_admin: User = Depends(get_current_admin
     return StandardResponse(
         success=True,
         message="User retrieved",
-        data=UserOut(id=str(user.id), name=user.name, email=user.email, role=user.role, is_active=user.is_active, created_at=user.created_at)
+        data=UserOut(id=str(user.id), name=user.name, email=user.email, username=user.username, role=user.role, is_active=user.is_active, created_at=user.created_at)
     )
 
 @router.put("/users/{user_id}", response_model=StandardResponse[UserOut])
@@ -78,13 +80,14 @@ async def update_user(user_id: str, update_data: UserUpdateAdmin, current_admin:
     update_dict = update_data.model_dump(exclude_unset=True)
     for key, value in update_dict.items():
         setattr(user, key, value)
-        
+    
+    user.updated_at = datetime.utcnow()
     await user.save()
     
     return StandardResponse(
         success=True,
         message="User updated",
-        data=UserOut(id=str(user.id), name=user.name, email=user.email, role=user.role, is_active=user.is_active, created_at=user.created_at)
+        data=UserOut(id=str(user.id), name=user.name, email=user.email, username=user.username, role=user.role, is_active=user.is_active, created_at=user.created_at)
     )
 
 @router.delete("/users/{user_id}", response_model=StandardResponse[None])
@@ -115,16 +118,17 @@ async def toggle_active(user_id: str, current_admin: User = Depends(get_current_
         raise HTTPException(status_code=404, detail="User not found")
         
     user.is_active = not user.is_active
+    user.updated_at = datetime.utcnow()
     await user.save()
     
     return StandardResponse(
         success=True,
         message=f"User {'activated' if user.is_active else 'deactivated'}",
-        data=UserOut(id=str(user.id), name=user.name, email=user.email, role=user.role, is_active=user.is_active, created_at=user.created_at)
+        data=UserOut(id=str(user.id), name=user.name, email=user.email, username=user.username, role=user.role, is_active=user.is_active, created_at=user.created_at)
     )
 
 @router.get("/stats", response_model=StandardResponse[dict])
-async def system_stats(current_admin: User = Depends(get_current_admin)):
+async def system_stats(current_admin: User = Depends(get_current_staff_or_admin)):
     total_users = await User.count()
     total_predictions = await Prediction.count()
     

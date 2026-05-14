@@ -45,7 +45,7 @@ export const GradCamViewer: React.FC<GradCamViewerProps> = ({ title, originalPat
               Original
             </button>
             <button 
-              className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${showGradCam ? 'bg-primary-50 text-primary' : 'text-navy-500 hover:text-navy-700'}`}
+              className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${showGradCam ? 'bg-primary/10 text-primary' : 'text-navy-500 hover:text-navy-700'}`}
               onClick={() => setShowGradCam(true)}
             >
               Highlighted

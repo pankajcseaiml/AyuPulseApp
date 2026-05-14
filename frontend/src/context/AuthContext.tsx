@@ -13,6 +13,7 @@ interface AuthContextType {
   refreshUser: () => Promise<void>;
   isAdmin: boolean;
   isDoctor: boolean;
+  isStaff: boolean;
   isPatient: boolean;
 }
 
@@ -114,6 +115,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isAdmin: user?.role === 'admin',
     isDoctor: user?.role === 'doctor',
     isPatient: user?.role === 'patient',
+    isStaff: user?.role === 'staff',
   };
 
   return (
@@ -138,7 +140,7 @@ export const withAuth = <P extends object>(Component: React.ComponentType<P>) =>
     if (isLoading) {
       return (
         <div className="min-h-screen flex items-center justify-center">
-          <div className="spinner"></div>
+          <div className="animate-spin rounded-full border-4 border-navy-200 border-t-primary h-12 w-12"></div>
         </div>
       );
     }
@@ -168,7 +170,7 @@ export const withAdmin = <P extends object>(Component: React.ComponentType<P>) =
     if (isLoading) {
       return (
         <div className="min-h-screen flex items-center justify-center">
-          <div className="spinner"></div>
+          <div className="animate-spin rounded-full border-4 border-navy-200 border-t-primary h-12 w-12"></div>
         </div>
       );
     }
