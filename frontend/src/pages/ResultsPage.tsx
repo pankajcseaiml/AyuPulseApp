@@ -210,8 +210,25 @@ export const ResultsPage: React.FC = () => {
               />
               {prediction.xray_analysis && (
                 <div className="p-4 bg-navy-50 rounded-xl border border-navy-100 text-sm text-navy-800 shadow-sm">
-                  <p className="font-heading font-semibold text-navy-900 mb-1">Model Conclusion</p>
-                  <p>{prediction.xray_analysis}</p>
+                  <p className="font-heading font-semibold text-navy-900 mb-2">Model Conclusion</p>
+                  <div className="whitespace-pre-line leading-relaxed space-y-1">
+                    {prediction.xray_analysis.split('\n').map((line: string, i: number) => {
+                      const trimmed = line.trim();
+                      if (!trimmed) return <br key={i} />;
+                      if (trimmed.startsWith('- ')) {
+                        return (
+                          <div key={i} className="flex items-start gap-2 pl-2">
+                            <span className="text-primary mt-0.5 flex-shrink-0">•</span>
+                            <span>{trimmed.replace(/^- /, '')}</span>
+                          </div>
+                        );
+                      }
+                      if (trimmed.startsWith('Detailed AI')) {
+                        return <p key={i} className="font-semibold text-navy-900 pt-1">{trimmed}</p>;
+                      }
+                      return <p key={i}>{trimmed}</p>;
+                    })}
+                  </div>
                 </div>
               )}
             </div>
@@ -225,8 +242,25 @@ export const ResultsPage: React.FC = () => {
               />
               {prediction.ecg_analysis && (
                 <div className="p-4 bg-navy-50 rounded-xl border border-navy-100 text-sm text-navy-800 shadow-sm">
-                  <p className="font-heading font-semibold text-navy-900 mb-1">Model Conclusion</p>
-                  <p>{prediction.ecg_analysis}</p>
+                  <p className="font-heading font-semibold text-navy-900 mb-2">Model Conclusion</p>
+                  <div className="whitespace-pre-line leading-relaxed space-y-1">
+                    {prediction.ecg_analysis.split('\n').map((line: string, i: number) => {
+                      const trimmed = line.trim();
+                      if (!trimmed) return <br key={i} />;
+                      if (trimmed.startsWith('- ')) {
+                        return (
+                          <div key={i} className="flex items-start gap-2 pl-2">
+                            <span className="text-primary mt-0.5 flex-shrink-0">•</span>
+                            <span>{trimmed.replace(/^- /, '')}</span>
+                          </div>
+                        );
+                      }
+                      if (trimmed.startsWith('Detailed AI')) {
+                        return <p key={i} className="font-semibold text-navy-900 pt-1">{trimmed}</p>;
+                      }
+                      return <p key={i}>{trimmed}</p>;
+                    })}
+                  </div>
                 </div>
               )}
             </div>

@@ -68,7 +68,7 @@ export const ShapChart: React.FC<ShapChartProps> = ({ features }) => {
               )}
               
               {/* Tooltip/Value display */}
-              <div className={`absolute text-[10px] font-medium px-1 ${isPositive ? 'left-[calc(50%+4px)] text-risk-high' : 'right-[calc(50%+4px)] text-risk-low'}`}>
+              <div className={`absolute text-[10px] font-semibold px-1 ${isPositive ? 'left-[calc(50%+4px)] text-navy-800' : 'right-[calc(50%+4px)] text-navy-800'}`}>
                 {feature.contribution_pct.toFixed(1)}%
               </div>
             </div>
