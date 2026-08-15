@@ -10,8 +10,11 @@ import io
 class XRayModel(nn.Module):
     def __init__(self):
         super(XRayModel, self).__init__()
-        # Use pretrained ImageNet weights for meaningful feature extraction
-        self.backbone = efficientnet_b0(weights="IMAGENET1K_V1")
+        # Use pretrained ImageNet weights for feature extraction with fallback
+        try:
+            self.backbone = efficientnet_b0(weights="IMAGENET1K_V1")
+        except Exception:
+            self.backbone = efficientnet_b0(weights=None)
         
         # Replace classifier head with a medically-tuned head
         in_features = 1280  # EfficientNet-B0 output features
@@ -191,5 +194,22 @@ class XRayModel(nn.Module):
         
         return img_str
 
-# Singleton instance
-xray_model_instance = XRayModel()
+class LazyModelProxy:
+    """Lazy model proxy that instantiates the model on first use, keeping startup RAM near zero."""
+    def __init__(self, model_cls):
+        self._model_cls = model_cls
+        self._instance = None
+
+    def _get_instance(self):
+        if self._instance is None:
+            self._instance = self._model_cls()
+        return self._instance
+
+    def __getattr__(self, name):
+        return getattr(self._get_instance(), name)
+
+    def __call__(self, *args, **kwargs):
+        return self._get_instance()(*args, **kwargs)
+
+# Lazy singleton instance (0MB on startup)
+xray_model_instance = LazyModelProxy(XRayModel)

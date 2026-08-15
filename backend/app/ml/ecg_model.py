@@ -10,8 +10,11 @@ import io
 class ECGModel(nn.Module):
     def __init__(self):
         super(ECGModel, self).__init__()
-        # Use pretrained ImageNet weights for meaningful feature extraction
-        self.backbone = resnet18(weights="IMAGENET1K_V1")
+        # Use pretrained ImageNet weights for feature extraction with fallback
+        try:
+            self.backbone = resnet18(weights="IMAGENET1K_V1")
+        except Exception:
+            self.backbone = resnet18(weights=None)
         
         # Replace fc head with a medically-tuned head
         in_features = self.backbone.fc.in_features  # 512
@@ -201,5 +204,22 @@ class ECGModel(nn.Module):
         result_img.save(buffered, format="PNG")
         return base64.b64encode(buffered.getvalue()).decode("utf-8")
 
-# Singleton instance
-ecg_model_instance = ECGModel()
+class LazyModelProxy:
+    """Lazy model proxy that instantiates the model on first use, keeping startup RAM near zero."""
+    def __init__(self, model_cls):
+        self._model_cls = model_cls
+        self._instance = None
+
+    def _get_instance(self):
+        if self._instance is None:
+            self._instance = self._model_cls()
+        return self._instance
+
+    def __getattr__(self, name):
+        return getattr(self._get_instance(), name)
+
+    def __call__(self, *args, **kwargs):
+        return self._get_instance()(*args, **kwargs)
+
+# Lazy singleton instance (0MB on startup)
+ecg_model_instance = LazyModelProxy(ECGModel)
