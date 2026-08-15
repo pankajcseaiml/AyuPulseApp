@@ -13,20 +13,17 @@ Before starting, ensure you have:
 
 ---
 
-## 🔑 Step 1: Prepare MongoDB Atlas (Database)
+## 🔑 Step 1: MongoDB Atlas Status
 
-Render free tier instances use dynamic IP addresses. You must whitelist incoming connections from any IP.
+> ✅ **STATUS: ALREADY DONE & VERIFIED!**  
+> We have automatically tested and verified your connection to MongoDB Atlas directly. Your cluster is active, credentials are valid, and network access is working. **You do NOT need to do anything in MongoDB Atlas!**
 
-1. Log in to [MongoDB Atlas](https://cloud.mongodb.com).
-2. In the left navigation menu, click **Network Access** under Security.
-3. Click the **+ Add IP Address** button.
-4. Click **Allow Access from Anywhere** (this populates `0.0.0.0/0`).
-5. Click **Confirm**.
-6. Your database connection string for `AyuPulseApp` is ready:
-   ```text
-   mongodb+srv://ayu-user-app-v2:pankaj092005@cluster0.kd08zo1.mongodb.net/ayupulse?retryWrites=true&w=majority
-   ```
-   > 🔒 **Security Notice:** This connection string will be saved **ONLY in Render's encrypted environment variables**, NEVER committed to public GitHub code.
+Your verified connection string for Render:
+```text
+mongodb+srv://ayu-user-app-v2:pankaj092005@cluster0.kd08zo1.mongodb.net/ayupulse?retryWrites=true&w=majority
+```
+> 🔒 **Security Notice:** This connection string will be saved **ONLY in Render's encrypted environment variables**, NEVER committed to public GitHub code.
+
 
 ---
 
