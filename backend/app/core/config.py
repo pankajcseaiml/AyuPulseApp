@@ -66,7 +66,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
     
     # CORS
-    BACKEND_CORS_ORIGINS: List[str] = [
+    BACKEND_CORS_ORIGINS: Union[List[str], str] = [
         "http://localhost:3000",
         "http://localhost:8000",
         "http://localhost:5173",
@@ -79,18 +79,34 @@ class Settings(BaseSettings):
         "https://ayupulseapp.vercel.app",
         "https://ayupulseapp-pankajcseaiml.vercel.app",
         "https://ayupulseapp.onrender.com",
-        # Current Vercel deployments
-        "https://frontend-kappa-lake-ahv5xllb0o.vercel.app",
-        "https://frontend-hix32ikti-pankajcseaimls-projects.vercel.app",
-        # Wildcard for all Vercel preview deployments
         "https://*.vercel.app"
     ]
+    
+    @field_validator('BACKEND_CORS_ORIGINS', mode='before')
+    @classmethod
+    def assemble_cors_origins(cls, v: Union[str, List[str]]) -> List[str]:
+        if isinstance(v, str):
+            v = v.strip()
+            if not v:
+                return ["*"]
+            if v == "*":
+                return ["*"]
+            if v.startswith("[") and v.endswith("]"):
+                import json
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
+            return [i.strip() for i in v.split(",") if i.strip()]
+        elif isinstance(v, list):
+            return v
+        return ["*"]
     
     # File upload
     UPLOAD_DIR: str = "uploads"
     MAX_UPLOAD_SIZE_MB: int = 10
-    ALLOWED_IMAGE_EXTENSIONS: List[str] = [".png", ".jpg", ".jpeg", ".bmp"]
-    ALLOWED_ECG_EXTENSIONS: List[str] = [".png", ".jpg", ".jpeg", ".csv", ".txt"]
+    ALLOWED_IMAGE_EXTENSIONS: Union[List[str], str] = [".png", ".jpg", ".jpeg", ".bmp"]
+    ALLOWED_ECG_EXTENSIONS: Union[List[str], str] = [".png", ".jpg", ".jpeg", ".csv", ".txt"]
     
     # ML Model paths (optional)
     XRAY_MODEL_PATH: Optional[str] = os.getenv("XRAY_MODEL_PATH", "models/xray_model.pth")

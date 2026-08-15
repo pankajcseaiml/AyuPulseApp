@@ -74,14 +74,14 @@ git push origin master
 
 Scroll down to the **Environment Variables** section on the same creation page (or click **Advanced** -> **Add Environment Variable**).
 
-Copy and paste these exact **12 Key-Value pairs** into Render:
+Copy and paste these **13 Key-Value pairs** into Render:
 
-| Key | Value | Security Function |
+| Key | Value | Security / System Function |
 | :--- | :--- | :--- |
 | `MONGODB_URL` | `mongodb+srv://ayu-user-app-v2:pankaj092005@cluster0.kd08zo1.mongodb.net/ayupulse?retryWrites=true&w=majority` | Encrypted connection string to MongoDB Atlas |
 | `SECRET_KEY` | `800ac9feb47b8fe852fce5af4cf3935c8d059bc24156be31659540ee7a72179e` | Cryptographic key used to sign JWT authentication tokens |
 | `DEBUG` | `false` | Disables debug mode so full error stack traces are hidden |
-| `BACKEND_CORS_ORIGINS` | `*` | Temporary origin policy for testing (will restrict to frontend URL after frontend deploy) |
+| `BACKEND_CORS_ORIGINS` | `*` | Temporary origin policy for testing (now supported cleanly as string or list) |
 | `PROJECT_NAME` | `AyuPulseApp` | Project identifier |
 | `VERSION` | `1.0.0` | API version |
 | `API_V1_STR` | `/api/v1` | API route prefix |
@@ -90,6 +90,7 @@ Copy and paste these exact **12 Key-Value pairs** into Render:
 | `UPLOAD_DIR` | `./uploads` | Directory for uploaded patient files |
 | `MAX_UPLOAD_SIZE` | `10485760` | Max file upload limit (10MB) |
 | `LOG_LEVEL` | `INFO` | Application log level |
+| `PYTHON_VERSION` | `3.11.11` | Pins Python to 3.11 for PyTorch and FastAPI compatibility |
 
 ---
 
