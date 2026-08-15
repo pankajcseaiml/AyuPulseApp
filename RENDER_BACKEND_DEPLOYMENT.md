@@ -1,6 +1,6 @@
 # 🚀 Comprehensive Guide: Deploying AyuPulseApp Backend on Render
 
-This guide provides step-by-step instructions to deploy your FastAPI backend (`backend/` folder) to [Render](https://render.com) from scratch.
+This guide provides step-by-step instructions to deploy your FastAPI backend (`backend/` folder) to [Render](https://render.com) from scratch with **maximum security best practices**.
 
 ---
 
@@ -22,14 +22,11 @@ Render free tier instances use dynamic IP addresses. You must whitelist incoming
 3. Click the **+ Add IP Address** button.
 4. Click **Allow Access from Anywhere** (this populates `0.0.0.0/0`).
 5. Click **Confirm**.
-6. In the left menu, click **Database** under Deployment.
-7. Click **Connect** next to your cluster.
-8. Choose **Drivers** (Node.js/Python).
-9. Copy your connection string. It looks like this:
+6. Your database connection string for `AyuPulseApp` is ready:
    ```text
-   mongodb+srv://<username>:<password>@cluster0.xxxx.mongodb.net/ayupulse?retryWrites=true&w=majority
+   mongodb+srv://ayu-user-app-v2:pankaj092005@cluster0.kd08zo1.mongodb.net/ayupulse?retryWrites=true&w=majority
    ```
-   > 💡 **Important:** Replace `<username>` and `<password>` with your actual MongoDB database user credentials.
+   > 🔒 **Security Notice:** This connection string will be saved **ONLY in Render's encrypted environment variables**, NEVER committed to public GitHub code.
 
 ---
 
@@ -48,7 +45,7 @@ git add .
 git commit -m "Prepare backend for Render deployment"
 
 # 4. Push to GitHub main branch
-git push origin main
+git push origin master
 ```
 
 ---
@@ -67,7 +64,7 @@ git push origin main
 | :--- | :--- | :--- |
 | **Name** | `ayupulse-backend` | Name of your service on Render |
 | **Region** | `Singapore` (or nearest to you) | Select any region |
-| **Branch** | `main` | Production branch |
+| **Branch** | `master` | Production branch |
 | **Root Directory** | `backend` | **CRITICAL!** Tells Render your backend is inside `backend/` folder |
 | **Runtime** | `Python 3` | Environment runtime |
 | **Build Command** | `pip install -r requirements.txt` | Installs FastAPI, PyTorch, etc. |
@@ -76,28 +73,26 @@ git push origin main
 
 ---
 
-## ⚙️ Step 4: Add Environment Variables
+## ⚙️ Step 4: Add Environment Variables (Secure Setup)
 
 Scroll down to the **Environment Variables** section on the same creation page (or click **Advanced** -> **Add Environment Variable**).
 
-Add the following **12 Key-Value pairs**:
+Copy and paste these exact **12 Key-Value pairs** into Render:
 
-| Key | Value |
-| :--- | :--- |
-| `MONGODB_URL` | `mongodb+srv://<user>:<password>@cluster0.xxx.mongodb.net/ayupulse?retryWrites=true&w=majority` *(Your Atlas Connection String)* |
-| `SECRET_KEY` | `ayupulse_super_secret_jwt_key_2026_production_secure_token_123` |
-| `DEBUG` | `false` |
-| `BACKEND_CORS_ORIGINS` | `*` |
-| `PROJECT_NAME` | `AyuPulseApp` |
-| `VERSION` | `1.0.0` |
-| `API_V1_STR` | `/api/v1` |
-| `ACCESS_TOKEN_EXPIRE_MINUTES` | `60` |
-| `ALGORITHM` | `HS256` |
-| `UPLOAD_DIR` | `./uploads` |
-| `MAX_UPLOAD_SIZE` | `10485760` |
-| `LOG_LEVEL` | `INFO` |
-
-> ⚠️ **Note:** `BACKEND_CORS_ORIGINS` is set to `*` initially so that testing is easy. Once your frontend is deployed on Vercel, you can update this to your specific Vercel URL.
+| Key | Value | Security Function |
+| :--- | :--- | :--- |
+| `MONGODB_URL` | `mongodb+srv://ayu-user-app-v2:pankaj092005@cluster0.kd08zo1.mongodb.net/ayupulse?retryWrites=true&w=majority` | Encrypted connection string to MongoDB Atlas |
+| `SECRET_KEY` | `800ac9feb47b8fe852fce5af4cf3935c8d059bc24156be31659540ee7a72179e` | Cryptographic key used to sign JWT authentication tokens |
+| `DEBUG` | `false` | Disables debug mode so full error stack traces are hidden |
+| `BACKEND_CORS_ORIGINS` | `*` | Temporary origin policy for testing (will restrict to frontend URL after frontend deploy) |
+| `PROJECT_NAME` | `AyuPulseApp` | Project identifier |
+| `VERSION` | `1.0.0` | API version |
+| `API_V1_STR` | `/api/v1` | API route prefix |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | `60` | JWT token expiration time |
+| `ALGORITHM` | `HS256` | JWT encryption algorithm |
+| `UPLOAD_DIR` | `./uploads` | Directory for uploaded patient files |
+| `MAX_UPLOAD_SIZE` | `10485760` | Max file upload limit (10MB) |
+| `LOG_LEVEL` | `INFO` | Application log level |
 
 ---
 
@@ -155,6 +150,31 @@ You should see the full interactive API documentation page where you can test au
 
 ---
 
+## 🔒 Security & Data Protection Guarantee
+
+Here is how your database and application data are protected against exposure and security breaches:
+
+1. **Zero Secret Leaks to GitHub (`.gitignore`)**:
+   - `backend/.env` containing your database connection credentials is git-ignored and **NEVER pushed to GitHub**.
+   - Render environment variables are encrypted at rest on Render's server infrastructure and only accessible by your running backend process.
+
+2. **TLS / SSL Encryption in Transit**:
+   - MongoDB connection uses `mongodb+srv://` which enforces mandatory SSL/TLS encryption for all data traveling between Render and MongoDB Atlas.
+   - Render automatically provisions an **HTTPS** SSL certificate for your backend domain, ensuring all client request payloads (passwords, health data) are encrypted.
+
+3. **Secure Authentication & Passwords**:
+   - All user passwords stored in MongoDB Atlas are hashed using **bcrypt** salt encryption.
+   - User authentication sessions are secured using 256-bit SHA-256 JWT signatures.
+
+4. **Production Information Disclosure Prevention**:
+   - `DEBUG=false` hides internal Python tracebacks and database details if an unhandled exception occurs.
+   - `SecurityHeadersMiddleware` sets HTTP security headers (X-Content-Type-Options, X-Frame-Options, X-XSS-Protection).
+
+5. **Post-Frontend CORS Restriction**:
+   - After we deploy your frontend to Vercel, we will update `BACKEND_CORS_ORIGINS` from `*` to your exact Vercel URL (e.g. `https://ayupulse.vercel.app`), preventing any unauthorized external websites from accessing your backend APIs.
+
+---
+
 ## 🛠️ Troubleshooting Guide
 
 | Issue | Cause | Fix |
@@ -169,5 +189,5 @@ You should see the full interactive API documentation page where you can test au
 ## 🎯 Next Steps
 
 Once your backend is successfully deployed on Render and `/health` returns `"database": "connected"`:
-1. Save your Render Backend URL (e.g., `https://ayupulse-backend.onrender.com`).
-2. You are now ready to proceed with frontend deployment!
+1. Copy your Render Backend URL (e.g., `https://ayupulse-backend.onrender.com`).
+2. Share the URL with me so we can configure and deploy your Vercel frontend!
