@@ -20,7 +20,7 @@ Before starting, ensure you have:
 
 Your verified connection string for Render:
 ```text
-mongodb+srv://ayu-user-app-v2:pankaj092005@cluster0.kd08zo1.mongodb.net/ayupulse?retryWrites=true&w=majority
+mongodb+srv://ayu-user-app-v2:<YOUR_MONGODB_PASSWORD>@cluster0.kd08zo1.mongodb.net/ayupulse?retryWrites=true&w=majority
 ```
 > 🔒 **Security Notice:** This connection string will be saved **ONLY in Render's encrypted environment variables**, NEVER committed to public GitHub code.
 
@@ -78,7 +78,7 @@ Copy and paste these **13 Key-Value pairs** into Render:
 
 | Key | Value | Security / System Function |
 | :--- | :--- | :--- |
-| `MONGODB_URL` | `mongodb+srv://ayu-user-app-v2:pankaj092005@cluster0.kd08zo1.mongodb.net/ayupulse?retryWrites=true&w=majority` | Encrypted connection string to MongoDB Atlas |
+| `MONGODB_URL` | `mongodb+srv://ayu-user-app-v2:<YOUR_MONGODB_PASSWORD>@cluster0.kd08zo1.mongodb.net/ayupulse?retryWrites=true&w=majority` | Encrypted connection string to MongoDB Atlas |
 | `SECRET_KEY` | `800ac9feb47b8fe852fce5af4cf3935c8d059bc24156be31659540ee7a72179e` | Cryptographic key used to sign JWT authentication tokens |
 | `DEBUG` | `false` | Disables debug mode so full error stack traces are hidden |
 | `BACKEND_CORS_ORIGINS` | `*` | Temporary origin policy for testing (now supported cleanly as string or list) |
