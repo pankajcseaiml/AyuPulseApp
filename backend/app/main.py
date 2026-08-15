@@ -45,15 +45,17 @@ app.add_middleware(
 
 from fastapi.staticfiles import StaticFiles
 
-# Create upload directories on startup
+# Create upload directories immediately at module load time
 def create_upload_dirs():
     """Ensure upload directories exist."""
-    from app.core.config import settings
-    import os
     upload_dir = settings.UPLOAD_DIR
+    os.makedirs(upload_dir, exist_ok=True)
     os.makedirs(os.path.join(upload_dir, "xray"), exist_ok=True)
     os.makedirs(os.path.join(upload_dir, "ecg"), exist_ok=True)
     os.makedirs(os.path.join(upload_dir, "temp"), exist_ok=True)
+
+# Ensure dirs exist before mounting static files
+create_upload_dirs()
 
 # Mount static files
 app.mount(f"/{settings.UPLOAD_DIR}", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
@@ -62,7 +64,6 @@ app.mount(f"/{settings.UPLOAD_DIR}", StaticFiles(directory=settings.UPLOAD_DIR),
 @app.on_event("startup")
 async def startup_event():
     await connect_to_mongo()
-    create_upload_dirs()
 
 @app.on_event("shutdown")
 async def shutdown_event():
